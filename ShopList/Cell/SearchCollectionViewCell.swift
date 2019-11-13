@@ -26,7 +26,7 @@ class SearchCollectionViewCell: UICollectionViewCell {
     
     private let nameLabel: UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 15)
+        label.font = .systemFont(ofSize: 10)
         label.textColor = UIColor.darkGray.withAlphaComponent(0.7)
         label.numberOfLines = 2
         label.textAlignment = .left
@@ -36,7 +36,7 @@ class SearchCollectionViewCell: UICollectionViewCell {
     
     private let priceLabel: UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 15)
+        label.font = .systemFont(ofSize: 10)
         label.textColor = UIColor.maraschino.withAlphaComponent(0.7)
         label.numberOfLines = 1
         label.textAlignment = .left
@@ -108,7 +108,7 @@ class SearchCollectionViewCell: UICollectionViewCell {
 //            profileImageView.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: 20),
 //            profileImageView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
 //            profileImageView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
-//            profileImageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20),
+            profileImageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20),
 //
 //            nameLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
 //            nameLabel.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 5),
