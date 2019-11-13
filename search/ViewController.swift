@@ -23,16 +23,16 @@ class ViewController: UIViewController {
     
     
     private let collectionView: UICollectionView = {
-        let numberOfItemsPerRow: CGFloat = 2.5
+        let numberOfItemsPerRow: CGFloat = 2.0
         let screenSize: CGRect = UIScreen.main.bounds
-        let leftAndRightPaddings: CGFloat = 50.0
     
         let layout = UICollectionViewFlowLayout()
-        let width = (screenSize.width-leftAndRightPaddings)/numberOfItemsPerRow
-        let height = (screenSize.height-leftAndRightPaddings)/numberOfItemsPerRow
-        layout.sectionInset = UIEdgeInsets(top: 10, left: 0, bottom: 10, right: 0)
+        let width = (screenSize.width) / numberOfItemsPerRow
+        let height = (screenSize.height) / 3.0
         layout.itemSize = CGSize(width: width, height: height)
         layout.scrollDirection = .vertical
+        layout.minimumInteritemSpacing = 0
+        layout.minimumLineSpacing = 0
         let cv = UICollectionView(frame: CGRect.zero, collectionViewLayout: layout)
         cv.register(SearchCollectionViewCell.self, forCellWithReuseIdentifier: SearchCollectionViewCell.reuseIdentifier)
         cv.backgroundColor = .white

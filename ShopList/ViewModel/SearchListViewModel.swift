@@ -13,9 +13,7 @@ class SearchListViewModel: NSObject {
     private let service: SearchServiceProtocol
     private var searchCellData: [SearchListCellData] = []
     private var rawSearchs: [Shop] = []
-    let leftAndRightPaddings: CGFloat = 80.0
-    let numberOfItemsPerRow: CGFloat = 2.0
-    let screenSize: CGRect = UIScreen.main.bounds
+
     // Mark: - View Model Outputs
     var onSearchSelectedByID: ((Int) -> Void)?
     var onDataRefreshed: (() -> Void)?
@@ -58,14 +56,4 @@ extension SearchListViewModel: UICollectionViewDelegate, UICollectionViewDelegat
         return cell
     }
     
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize
-    {
-        return CGSize(width: 350, height: 350)
-//        return CGSize(width: width, height: 250)
-    }
-
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets
-    {
-        return UIEdgeInsets(top: 3, left: 3, bottom: 3, right: 3)
-    }
 }
