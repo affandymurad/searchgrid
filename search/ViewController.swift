@@ -42,7 +42,7 @@ class ViewController: UIViewController {
     }()
     
     private let applyButton : UIButton =  {
-        let btn = UIButton(frame: CGRect(x: 0, y: UIScreen.main.bounds.height * 0.9, width: UIScreen.main.bounds.width, height: 50))
+        let btn = UIButton(frame: CGRect(x: 0, y: UIScreen.main.bounds.height - 50.0, width: UIScreen.main.bounds.width, height: 50))
         btn.backgroundColor = .clover
         btn.setTitle("Filter", for: .normal)
         return btn
