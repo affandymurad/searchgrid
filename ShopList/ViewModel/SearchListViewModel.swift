@@ -60,12 +60,12 @@ extension SearchListViewModel: UICollectionViewDelegate, UICollectionViewDelegat
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize
     {
-        let width = (screenSize.width-leftAndRightPaddings)/numberOfItemsPerRow
-        return CGSize(width: width, height: width)
+        return CGSize(width: 350, height: 350)
+//        return CGSize(width: width, height: 250)
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets
     {
-        return UIEdgeInsets(top: 20, left: 8, bottom: 5, right: 8)
+        return UIEdgeInsets(top: 3, left: 3, bottom: 3, right: 3)
     }
 }

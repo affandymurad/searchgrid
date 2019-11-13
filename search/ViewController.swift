@@ -11,6 +11,7 @@ import UIKit
 import RxCocoa
 
 class ViewController: UIViewController {
+
 //    private let tableView: UITableView = {
 //        let tv = UITableView(frame: .zero, style: .plain)
 //        tv.register(SearchListTableViewCell.self, forCellReuseIdentifier: SearchListTableViewCell.reuseIdentifier)
@@ -22,9 +23,21 @@ class ViewController: UIViewController {
     
     
     private let collectionView: UICollectionView = {
+        let numberOfItemsPerRow: CGFloat = 2.5
+        let screenSize: CGRect = UIScreen.main.bounds
+        let leftAndRightPaddings: CGFloat = 50.0
+    
         let layout = UICollectionViewFlowLayout()
+        let width = (screenSize.width-leftAndRightPaddings)/numberOfItemsPerRow
+        let height = (screenSize.height-leftAndRightPaddings)/numberOfItemsPerRow
+        layout.sectionInset = UIEdgeInsets(top: 10, left: 0, bottom: 10, right: 0)
+        layout.itemSize = CGSize(width: width, height: height)
+        layout.scrollDirection = .vertical
         let cv = UICollectionView(frame: CGRect.zero, collectionViewLayout: layout)
         cv.register(SearchCollectionViewCell.self, forCellWithReuseIdentifier: SearchCollectionViewCell.reuseIdentifier)
+        cv.backgroundColor = .white
+        cv.translatesAutoresizingMaskIntoConstraints = false
+        cv.isScrollEnabled = true
         return cv
     }()
     
@@ -70,9 +83,12 @@ class ViewController: UIViewController {
         view.addSubview(applyButton)
         
         NSLayoutConstraint.activate([
+            collectionView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            collectionView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             collectionView.leftAnchor.constraint(equalTo: view.leftAnchor),
             collectionView.rightAnchor.constraint(equalTo: view.rightAnchor),
             collectionView.topAnchor.constraint(equalTo: view.topAnchor),
+//            collectionView.widthAnchor.constraint(equalToConstant: view.frame.width),
             collectionView.bottomAnchor.constraint(equalTo: applyButton.topAnchor),
             
             
