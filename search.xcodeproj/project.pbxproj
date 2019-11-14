@@ -10,6 +10,7 @@
 		315560247BA915F7DA731F2A /* Pods_search.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 26F270E6AC2349D72CBB5C46 /* Pods_search.framework */; };
 		623289279ED751D00B0CC3AE /* Pods_searchTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D5EF68D68AC696975E49BFE8 /* Pods_searchTests.framework */; };
 		AA7508750630D8321E6FCA86 /* Pods_search_searchUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67387ACB7D6924CADA20E5C7 /* Pods_search_searchUITests.framework */; };
+		B33F39D0237DBA46006B5227 /* SaringViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B33F39CF237DBA46006B5227 /* SaringViewController.swift */; };
 		B34C83B4237856F400315A8A /* Shop.swift in Sources */ = {isa = PBXBuildFile; fileRef = B34C83B3237856F400315A8A /* Shop.swift */; };
 		B34C83B623785DAB00315A8A /* ShopResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = B34C83B523785DAB00315A8A /* ShopResponse.swift */; };
 		B34C83B823785E1A00315A8A /* StatusModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B34C83B723785E1A00315A8A /* StatusModel.swift */; };
@@ -55,6 +56,7 @@
 		67387ACB7D6924CADA20E5C7 /* Pods_search_searchUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_search_searchUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8A2EAACB77BE8136CB0F96DC /* Pods-search-searchUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-search-searchUITests.debug.xcconfig"; path = "Target Support Files/Pods-search-searchUITests/Pods-search-searchUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		A43BC86D3270662F19CA11C7 /* Pods-searchTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-searchTests.release.xcconfig"; path = "Target Support Files/Pods-searchTests/Pods-searchTests.release.xcconfig"; sourceTree = "<group>"; };
+		B33F39CF237DBA46006B5227 /* SaringViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SaringViewController.swift; sourceTree = "<group>"; };
 		B34C83B3237856F400315A8A /* Shop.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Shop.swift; sourceTree = "<group>"; };
 		B34C83B523785DAB00315A8A /* ShopResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopResponse.swift; sourceTree = "<group>"; };
 		B34C83B723785E1A00315A8A /* StatusModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusModel.swift; sourceTree = "<group>"; };
@@ -248,6 +250,7 @@
 			isa = PBXGroup;
 			children = (
 				B3D0D4EB237C5A3F0050B691 /* FilterViewController.swift */,
+				B33F39CF237DBA46006B5227 /* SaringViewController.swift */,
 			);
 			path = Filter;
 			sourceTree = "<group>";
@@ -511,6 +514,7 @@
 				B3BFF38523790205005236C0 /* NetworkManager.swift in Sources */,
 				B34C83B823785E1A00315A8A /* StatusModel.swift in Sources */,
 				B3E38740237BBB4100802DC3 /* SearchListViewModel.swift in Sources */,
+				B33F39D0237DBA46006B5227 /* SaringViewController.swift in Sources */,
 				B3BFF38723790244005236C0 /* Route.swift in Sources */,
 				B3D0D4EC237C5A3F0050B691 /* FilterViewController.swift in Sources */,
 				B3B9D4F42377FC3D00663139 /* AppDelegate.swift in Sources */,

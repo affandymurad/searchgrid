@@ -11,10 +11,9 @@ import UIKit
 import RxCocoa
 
 class ViewController: UIViewController {
-
-
+    
     @objc func pressed() {
-        let vc = FilterViewController()
+        let vc = SaringViewController()
         self.navigationController?.pushViewController(vc, animated: true)
     }
     
@@ -29,7 +28,7 @@ class ViewController: UIViewController {
         layout.itemSize = CGSize(width: width, height: height)
         layout.scrollDirection = .vertical
         layout.minimumInteritemSpacing = 0
-        layout.minimumLineSpacing = 5
+        layout.minimumLineSpacing = 0
         let cv = UICollectionView(frame: CGRect.zero, collectionViewLayout: layout)
         cv.register(SearchCollectionViewCell.self, forCellWithReuseIdentifier: SearchCollectionViewCell.reuseIdentifier)
         cv.backgroundColor = .white
@@ -55,24 +54,6 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         self.setupView()
         self.setupViewModel()
-        // Do any additional setup after loading the view.
-//        NetworkManager.sharedInstance.rx.request(.cari(params: .specify(q: "Samsung", pmin: "10000", pmax: "1000000", wholesale: "true", official: "true", fshop: "2", start: "0", rows: "10")))
-//            .asObservable()
-//            .subscribe{ (shop) in
-//                switch shop {
-//                case .next(let response):
-//                    let shop = try! JSONDecoder().decode(ShopResponse.self, from: response.data)
-////                    print("PAIN")
-//                    print(shop.data)
-//                case .error(let error):
-//                    print(error)
-//                case .completed:
-//                    print("data")
-//                }
-//        }.disposed(by: disposeBag)
-        
-    
-
     }
     
     private func setupView() {
@@ -81,19 +62,15 @@ class ViewController: UIViewController {
         view.addSubview(applyButton)
         
         NSLayoutConstraint.activate([
-            collectionView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-            collectionView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            collectionView.leftAnchor.constraint(equalTo: view.leftAnchor),
-            collectionView.rightAnchor.constraint(equalTo: view.rightAnchor),
+            collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             collectionView.topAnchor.constraint(equalTo: view.topAnchor),
 //            collectionView.widthAnchor.constraint(equalToConstant: view.frame.width),
             collectionView.bottomAnchor.constraint(equalTo: applyButton.topAnchor),
             
             
-            applyButton.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-            applyButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            applyButton.leftAnchor.constraint(equalTo: view.leftAnchor),
-            applyButton.rightAnchor.constraint(equalTo: view.rightAnchor),
+            applyButton.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            applyButton.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             applyButton.topAnchor.constraint(equalTo: collectionView.bottomAnchor),
             applyButton.bottomAnchor.constraint(equalTo: view.bottomAnchor),
         ])
@@ -103,7 +80,11 @@ class ViewController: UIViewController {
     }
     
     private func setupViewModel(){
-        let input = ReactiveSearchListViewModel.Input(didLoadTriger: .just(()), didTapCellTriger: collectionView.rx.itemSelected.asDriver(), pullToRefreshTrigger: refreshControl.rx.controlEvent(.allEvents).asDriver())
+        
+        viewModel.start = 0
+        viewModel.rows = 10
+        
+        let input = ReactiveSearchListViewModel.Input(didLoadTriger: .just(()), didTapCellTriger: collectionView.rx.itemSelected.asDriver(), pullToRefreshTrigger: refreshControl.rx.controlEvent(.allEvents).asDriver(), didScrollReachBottom: .just(()))
         
         let output = viewModel.transform(input: input)
         

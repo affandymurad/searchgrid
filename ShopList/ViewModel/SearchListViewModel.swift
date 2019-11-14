@@ -24,23 +24,6 @@ class SearchListViewModel: NSObject {
         super.init()
     }
     
-    func fetchSearchList(start: String, rows: String) {
-        service.reactiveFetchSearchs(start: start, rows: rows).subscribe{
-            (shop) in
-            switch shop {
-            case .next(let response):
-                self.rawSearchs = response
-            case .error(let error):
-                self.onError = (error as! ((Error) -> Void))
-            case .completed:
-                self.searchCellData = self.rawSearchs.map {
-                    SearchListCellData(imageURL: $0.imageUri!, name: $0.name!, price: $0.price!)
-                }
-            }
-        }
-    }
-    
-    
 }
 
 // MARK: - Table view data source & delegates will be implemented here
@@ -56,10 +39,16 @@ extension SearchListViewModel: UICollectionViewDelegate, UICollectionViewDelegat
         return cell
     }
     
-    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-         if (indexPath.row == searchCellData.count - 1 ) { //it's your last cell
-           //Load more data & reload your collection view
-         }
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        let contentOffsetX = scrollView.contentOffset.x
+        if contentOffsetX >= (scrollView.contentSize.width - scrollView.bounds.width) - 20 /* Needed offset */ {
+            
+        print("Akhir")
+//            guard !self.isLoading else { return }
+//            self.isLoading = true
+            // load more data
+            // than set self.isLoading to false when new data is loaded
+        }
     }
     
 }
