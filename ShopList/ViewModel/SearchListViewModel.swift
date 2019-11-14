@@ -24,8 +24,8 @@ class SearchListViewModel: NSObject {
         super.init()
     }
     
-    func fetchSearchList() {
-        service.reactiveFetchSearchs().subscribe{
+    func fetchSearchList(start: String, rows: String) {
+        service.reactiveFetchSearchs(start: start, rows: rows).subscribe{
             (shop) in
             switch shop {
             case .next(let response):
@@ -44,7 +44,7 @@ class SearchListViewModel: NSObject {
 }
 
 // MARK: - Table view data source & delegates will be implemented here
-extension SearchListViewModel: UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource {
+extension SearchListViewModel: UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource, UIScrollViewDelegate {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return searchCellData.count
     }
@@ -54,6 +54,12 @@ extension SearchListViewModel: UICollectionViewDelegate, UICollectionViewDelegat
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SearchCollectionViewCell.reuseIdentifier, for: indexPath) as! SearchCollectionViewCell
         cell.configureCell(with: cellData)
         return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+         if (indexPath.row == searchCellData.count - 1 ) { //it's your last cell
+           //Load more data & reload your collection view
+         }
     }
     
 }

@@ -12,14 +12,11 @@ import RxCocoa
 
 class ViewController: UIViewController {
 
-//    private let tableView: UITableView = {
-//        let tv = UITableView(frame: .zero, style: .plain)
-//        tv.register(SearchListTableViewCell.self, forCellReuseIdentifier: SearchListTableViewCell.reuseIdentifier)
-//        tv.estimatedRowHeight = 80
-//        tv.rowHeight = 80
-//        tv.translatesAutoresizingMaskIntoConstraints = false
-//        return tv
-//    }()
+
+    @objc func pressed() {
+        let vc = FilterViewController()
+        self.navigationController?.pushViewController(vc, animated: true)
+    }
     
     
     private let collectionView: UICollectionView = {
@@ -32,7 +29,7 @@ class ViewController: UIViewController {
         layout.itemSize = CGSize(width: width, height: height)
         layout.scrollDirection = .vertical
         layout.minimumInteritemSpacing = 0
-        layout.minimumLineSpacing = 0
+        layout.minimumLineSpacing = 5
         let cv = UICollectionView(frame: CGRect.zero, collectionViewLayout: layout)
         cv.register(SearchCollectionViewCell.self, forCellWithReuseIdentifier: SearchCollectionViewCell.reuseIdentifier)
         cv.backgroundColor = .white
@@ -44,6 +41,7 @@ class ViewController: UIViewController {
     private let applyButton : UIButton =  {
         let btn = UIButton(frame: CGRect(x: 0, y: UIScreen.main.bounds.height - 50.0, width: UIScreen.main.bounds.width, height: 50))
         btn.backgroundColor = .clover
+        btn.addTarget(self, action: #selector(pressed), for: .touchUpInside)
         btn.setTitle("Filter", for: .normal)
         return btn
     }()
@@ -93,6 +91,7 @@ class ViewController: UIViewController {
             
             
             applyButton.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            applyButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             applyButton.leftAnchor.constraint(equalTo: view.leftAnchor),
             applyButton.rightAnchor.constraint(equalTo: view.rightAnchor),
             applyButton.topAnchor.constraint(equalTo: collectionView.bottomAnchor),

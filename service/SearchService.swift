@@ -15,13 +15,13 @@ enum SearchServiceError: Error {
 }
 
 protocol SearchServiceProtocol {
-    func reactiveFetchSearchs() -> Observable<[Shop]>
+    func reactiveFetchSearchs(start: String, rows: String) -> Observable<[Shop]>
 }
 
 class NetworkSearchService: SearchServiceProtocol {
     
-    func reactiveFetchSearchs() -> Observable<[Shop]> {
-        let response = NetworkManager.sharedInstance.rx.request(.cari(params: .specify(q: "Samsung", pmin: "10000", pmax: "1000000", wholesale: "true", official: "true", fshop: "2", start: "0", rows: "10")))
+    func reactiveFetchSearchs(start: String, rows: String) -> Observable<[Shop]> {
+        let response = NetworkManager.sharedInstance.rx.request(.cari(params: .specify(q: "Samsung", pmin: "100000", pmax: "2000000", wholesale: "true", official: "true", fshop: "2", start: start, rows: rows)))
                     .asObservable()
                     .flatMap{ data -> Observable<ShopResponse> in
                         let decoder = JSONDecoder()

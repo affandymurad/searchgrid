@@ -12,6 +12,7 @@ import RxCocoa
 
 class ReactiveSearchListViewModel: ViewModelType {
     let service: SearchServiceProtocol
+//    let didScrollReachBottomTrigger = PublishSubject<Void>
     
     init(service: SearchServiceProtocol = NetworkSearchService()) {
         self.service = service
@@ -41,7 +42,7 @@ class ReactiveSearchListViewModel: ViewModelType {
             })
             .flatMapLatest{
             [service] _ -> Driver<[Shop]> in service
-            .reactiveFetchSearchs()
+                .reactiveFetchSearchs(start: "0", rows: "10")
                 .do(onNext:{_ in isLoading.accept(false)
                 }, onError: {error in errorMessage.onNext(error.localizedDescription)
                     isLoading.accept(false)

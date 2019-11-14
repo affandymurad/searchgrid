@@ -11,6 +11,7 @@ target 'search' do
   pod 'Moya/RxSwift'
   pod 'Moya'
   pod 'Kingfisher'  
+  pod 'WARangeSlider'
 
   target 'searchTests' do
     inherit! :search_paths

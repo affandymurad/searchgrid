@@ -15,6 +15,7 @@ PODS:
   - RxCocoa (4.5.0):
     - RxSwift (>= 4.4.2, ~> 4.4)
   - RxSwift (4.5.0)
+  - WARangeSlider (1.1.1)
 
 DEPENDENCIES:
   - Kingfisher
@@ -22,6 +23,7 @@ DEPENDENCIES:
   - Moya/RxSwift
   - RxCocoa (~> 4.0)
   - RxSwift (~> 4.0)
+  - WARangeSlider
 
 SPEC REPOS:
   trunk:
@@ -31,6 +33,7 @@ SPEC REPOS:
     - Result
     - RxCocoa
     - RxSwift
+    - WARangeSlider
 
 SPEC CHECKSUMS:
   Alamofire: 85e8a02c69d6020a0d734f6054870d7ecb75cf18
@@ -39,7 +42,8 @@ SPEC CHECKSUMS:
   Result: bd966fac789cc6c1563440b348ab2598cc24d5c7
   RxCocoa: cbf70265dc65a981d4ac982e513c10cf23df24a0
   RxSwift: f172070dfd1a93d70a9ab97a5a01166206e1c575
+  WARangeSlider: 54b3e0853b8d16c444fd539005901aecee86837d
 
-PODFILE CHECKSUM: 19b8e861a90815e786d69362029f4088b3fc1287
+PODFILE CHECKSUM: 6a9671f5eb3554638f0bae5748e7d8c864fb8ee4
 
 COCOAPODS: 1.8.4
