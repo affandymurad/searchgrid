@@ -17,7 +17,6 @@ class ViewController: UIViewController {
         self.navigationController?.pushViewController(vc, animated: true)
     }
     
-    
     private let collectionView: UICollectionView = {
         let numberOfItemsPerRow: CGFloat = 2.0
         let screenSize: CGRect = UIScreen.main.bounds
@@ -38,7 +37,9 @@ class ViewController: UIViewController {
     }()
     
     private let applyButton : UIButton =  {
-        let btn = UIButton(frame: CGRect(x: 0, y: UIScreen.main.bounds.height - 50.0, width: UIScreen.main.bounds.width, height: 50))
+        let statusBarSize = UIApplication.shared.statusBarFrame.size
+        let statusBarHeight = Swift.min(statusBarSize.width, statusBarSize.height)
+        let btn = UIButton(frame: CGRect(x: 0, y: UIScreen.main.bounds.height - 30.0 - statusBarHeight, width: UIScreen.main.bounds.width, height: 50))
         btn.backgroundColor = .clover
         btn.addTarget(self, action: #selector(pressed), for: .touchUpInside)
         btn.setTitle("Filter", for: .normal)
@@ -58,6 +59,7 @@ class ViewController: UIViewController {
     
     private func setupView() {
         title = "Search"
+        
         view.addSubview(collectionView)
         view.addSubview(applyButton)
         
@@ -100,8 +102,6 @@ class ViewController: UIViewController {
         output.isLoading.drive(refreshControl.rx.isRefreshing).disposed(by: disposeBag)
         
     }
-
-    
 
 }
 

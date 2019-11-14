@@ -9,15 +9,34 @@
 import UIKit
 import RxSwift
 import RxCocoa
+import WARangeSlider
 
 
 class SaringViewController: UIViewController {
+    let min = 0.0
+    let max = 100000000.0
+    
+    let rangeSliders : RangeSlider = {
+        let rangeSlider = RangeSlider(frame: CGRect.zero)
+        rangeSlider.trackTintColor = .lightGray
+        rangeSlider.trackHighlightTintColor = .clover
+        rangeSlider.thumbTintColor = .white
+        rangeSlider.thumbBorderColor = .clover
+        rangeSlider.thumbBorderWidth = 2.0
+        rangeSlider.lowerValue = 0.0
+        rangeSlider.upperValue = 10000000.0
+        rangeSlider.addTarget(self, action: #selector(rangeSliderValueChanged(_:)), for: .valueChanged)
+        return rangeSlider
+    }()
+     
+
     
     private lazy var stackView: UIStackView = {
-        let stackView = UIStackView()
+        let stackView = UIStackView(arrangedSubviews: [stackViewMinimumMaximum, rangeSliders])
         stackView.axis = .vertical
         stackView.alignment = .leading
         stackView.distribution = .fill
+        stackView.layoutMargins = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
         stackView.spacing = 10
         return stackView
     }()
@@ -119,6 +138,12 @@ class SaringViewController: UIViewController {
         
         view.backgroundColor = UIColor.white
         
+        let margin: CGFloat = 20.0
+        let width = view.bounds.width - 2.0 * margin
+        rangeSliders.frame = CGRect(x: margin, y: margin + topLayoutGuide.length + 100,
+        width: width, height: 31.0)
+
+        
         let closeBarButtonItem = UIBarButtonItem(barButtonSystemItem: .stop, target: self, action: #selector(close))
         self.navigationItem.leftBarButtonItem  = closeBarButtonItem
         
@@ -131,6 +156,11 @@ class SaringViewController: UIViewController {
 //        stackView.addArrangedSubview(buttonSearch)
 //        stackView.addArrangedSubview(ageLabel)
 //        stackView.addArrangedSubview(positionLabel)
+
+//        let margin: CGFloat = 20.0
+//        let width = view.bounds.width - 2.0 * margin
+//        rangeSliders.frame = CGRect(x: margin, y: margin,
+//                                    width: 100.0, height: 40.0)
         
         stackViewMinimum.addArrangedSubview(minimumLabel)
         stackViewMinimum.addArrangedSubview(minimumTextInput)
@@ -139,16 +169,25 @@ class SaringViewController: UIViewController {
         stackViewMinimumMaximum.addArrangedSubview(stackViewMinimum)
         stackViewMinimumMaximum.addArrangedSubview(stackViewMaximum)
         stackView.addArrangedSubview(stackViewMinimumMaximum)
+//        stackView.addArrangedSubview(rangeSliders)
+        
         self.view.addSubview(stackView)
+        self.view.addSubview(rangeSliders)
         
         buttonSearch.setTitle("Search", for: .normal)
         buttonSearch.widthAnchor.constraint(equalToConstant: 100).isActive = true
         
         stackView.translatesAutoresizingMaskIntoConstraints = false
-        stackView.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 30).isActive = true
-        stackView.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: 10).isActive = true
-        stackView.rightAnchor.constraint(equalTo: self.view.rightAnchor, constant: 10).isActive = true
+        stackView.topAnchor.constraint(equalTo: self.view.topAnchor).isActive = true
+        stackView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor).isActive = true
+        stackView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor).isActive = true
+        stackView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor).isActive = true
         stackView.isLayoutMarginsRelativeArrangement = true
+        
+//        rangeSliders.translatesAutoresizingMaskIntoConstraints = false
+//        rangeSliders.topAnchor.constraint(equalTo: stackView.bottomAnchor).isActive = true
+//        rangeSliders.leadingAnchor.constraint(equalTo: self.view.leadingAnchor).isActive = true
+//        rangeSliders.trailingAnchor.constraint(equalTo: self.view.trailingAnchor).isActive = true
 //        stackView.directionalLayoutMargins = NSDirectionalEdgeInsets(top: 20, leading: 20, bottom: 20, trailing: 20)
     }
 
@@ -158,6 +197,15 @@ class SaringViewController: UIViewController {
     
     @objc func reset(){
 //        resetState()
+    }
+    
+    @objc func rangeSliderValueChanged(_ rangeSlider: RangeSlider) {
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .currency
+        formatter.locale = Locale(identifier: "id_ID")
+        minimumTextInput.text = formatter.string(from: NSNumber(value: Int((rangeSlider.lowerValue * 2000).rounded() * 5000)))
+        
+        maximumTextInput.text = formatter.string(from: NSNumber(value: Int((rangeSlider.upperValue * 2000).rounded() * 5000)))
     }
 
 }
