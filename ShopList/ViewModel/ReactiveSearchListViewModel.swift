@@ -14,6 +14,7 @@ class ReactiveSearchListViewModel: ViewModelType {
     let service: SearchServiceProtocol
     var start = 0
     var rows = 0
+    var rawSearchs: [Shop] = []
     
     init(service: SearchServiceProtocol = NetworkSearchService()) {
         self.service = service
@@ -39,20 +40,28 @@ class ReactiveSearchListViewModel: ViewModelType {
         
         let fetchDataTrigger = Driver.merge(input.didLoadTriger, input.pullToRefreshTrigger)
         
-        
-        
         let fetchData = fetchDataTrigger.do(onNext:{
             _ in isLoading.accept(true)
             })
-            .flatMapLatest{
+            .flatMap{
             [service] _ -> Driver<[Shop]> in service
                 .reactiveFetchSearchs(start: String(self.start), rows: String(self.rows))
-                .do(onNext:{_ in isLoading.accept(false)
+                .do(onNext:{result in
+                    isLoading.accept(false)
+                    self.rawSearchs.append(contentsOf: result)
                 }, onError: {error in errorMessage.onNext(error.localizedDescription)
                     isLoading.accept(false)
                 })
             .asDriver{_ -> Driver<[Shop]> in Driver.empty()}
         }
+        
+            
+            
+//            .map{
+//            searchs -> [SearchListCellData] in searchs.map{
+//                search -> SearchListCellData in SearchListCellData(imageURL: search.imageUri!, name: search.name!, price: search.price!)
+//            }
+//        }
         
         let searchListCellData = fetchData.map{
             searchs -> [SearchListCellData] in searchs.map{

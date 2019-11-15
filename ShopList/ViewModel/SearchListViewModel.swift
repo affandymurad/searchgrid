@@ -12,10 +12,10 @@ import UIKit
 class SearchListViewModel: NSObject {
     private let service: SearchServiceProtocol
     private var searchCellData: [SearchListCellData] = []
-    private var rawSearchs: [Shop] = []
+//    var rawSearchs: [Shop] = []
 
     // Mark: - View Model Outputs
-    var onSearchSelectedByID: ((Int) -> Void)?
+//    var onSearchSelectedByID: ((Int) -> Void)?
     var onDataRefreshed: (() -> Void)?
     var onError: ((Error) -> Void)?
     
@@ -27,7 +27,7 @@ class SearchListViewModel: NSObject {
 }
 
 // MARK: - Table view data source & delegates will be implemented here
-extension SearchListViewModel: UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource, UIScrollViewDelegate {
+extension SearchListViewModel: UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return searchCellData.count
     }
@@ -37,18 +37,6 @@ extension SearchListViewModel: UICollectionViewDelegate, UICollectionViewDelegat
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SearchCollectionViewCell.reuseIdentifier, for: indexPath) as! SearchCollectionViewCell
         cell.configureCell(with: cellData)
         return cell
-    }
-    
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        let contentOffsetX = scrollView.contentOffset.x
-        if contentOffsetX >= (scrollView.contentSize.width - scrollView.bounds.width) - 20 /* Needed offset */ {
-            
-        print("Akhir")
-//            guard !self.isLoading else { return }
-//            self.isLoading = true
-            // load more data
-            // than set self.isLoading to false when new data is loaded
-        }
     }
     
 }

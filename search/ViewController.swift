@@ -53,15 +53,23 @@ class ViewController: UIViewController {
     let disposeBag = DisposeBag()
     override func viewDidLoad() {
         super.viewDidLoad()
+        viewModel.start = 0
+        viewModel.rows = 10
+        
         self.setupView()
         self.setupViewModel()
+        
     }
+
     
     private func setupView() {
         title = "Search"
         
         view.addSubview(collectionView)
         view.addSubview(applyButton)
+        
+        collectionView.rx.setDelegate(self).disposed(by: disposeBag)
+
         
         NSLayoutConstraint.activate([
             collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
@@ -83,8 +91,6 @@ class ViewController: UIViewController {
     
     private func setupViewModel(){
         
-        viewModel.start = 0
-        viewModel.rows = 10
         
         let input = ReactiveSearchListViewModel.Input(didLoadTriger: .just(()), didTapCellTriger: collectionView.rx.itemSelected.asDriver(), pullToRefreshTrigger: refreshControl.rx.controlEvent(.allEvents).asDriver(), didScrollReachBottom: .just(()))
         
@@ -97,11 +103,87 @@ class ViewController: UIViewController {
         
         output.errorData.drive(onNext: {errorMessage in print ("error nih", errorMessage)}).disposed(by: disposeBag)
         
-        output.selectedIndex.drive(onNext: {(index, model) in print("inih index \(index), model: \(model)")}).disposed(by: disposeBag)
+//        output.selectedIndex.drive(onNext: {(index, model) in print("inih index \(index), model: \(model)")}).disposed(by: disposeBag)
         
         output.isLoading.drive(refreshControl.rx.isRefreshing).disposed(by: disposeBag)
         
     }
 
 }
+
+extension ViewController: UIScrollViewDelegate {
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        if(scrollView.contentOffset.y == scrollView.frame.size.height)       {
+        // You have reached page 1
+            scrollingFinished(scrollView: scrollView)
+        }
+    }
+    
+//    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+//        if decelerate {
+//            //didEndDecelerating will be called for sure
+//            print("decelerate")
+//            return
+//        }
+//        else {
+//            scrollingFinished(scrollView: scrollView)
+////            scrollingFinished(scrollView: scrollView)
+//        }
+//    }
+    
+    
+    
+  func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+//    if scrollView == collectionView {
+//        print("collectionview")
+//      if (scrollView.bounds.maxY) == scrollView.contentSize.height{
+//           scrollingFinished(scrollView: scrollView)
+    
+
+    var verticalOffsetForTop: CGFloat {
+        let topInset = scrollView.contentInset.top
+        return -topInset
+    }
+
+    var verticalOffsetForBottom: CGFloat {
+        let scrollViewHeight = scrollView.bounds.height
+        let scrollContentSizeHeight = scrollView.contentSize.height
+        let bottomInset = scrollView.contentInset.bottom
+        let scrollViewBottomOffset = scrollContentSizeHeight + bottomInset - scrollViewHeight
+        return scrollViewBottomOffset
+    }
+    
+    var isAtTop: Bool {
+        return scrollView.contentOffset.y <= verticalOffsetForTop
+    }
+
+    var isAtBottom: Bool {
+        return scrollView.contentOffset.y >= verticalOffsetForBottom
+    }
+
+    if isAtTop
+    {
+        // then we are at the top
+        print("awal")
+    }
+    else if isAtBottom
+    {
+        // then we are at the end
+//        print("terakhir")
+        viewModel.start = 0
+        viewModel.rows = 10
+        
+        setupViewModel()
+        
+    }
+//        }
+//    }
+  }
+    
+    func scrollingFinished(scrollView: UIScrollView) {
+       // Your code
+        print("terakhir")
+    }
+}
+
 

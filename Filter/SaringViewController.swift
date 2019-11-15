@@ -50,6 +50,31 @@ class SaringViewController: UIViewController {
         return stackView
     }()
     
+    private lazy var stackViewSwitch: UIStackView = {
+        let stackView = UIStackView()
+        stackView.axis = .horizontal
+        stackView.alignment = .leading
+        stackView.distribution = .fill
+        stackView.layoutMargins = UIEdgeInsets(top: 100, left: 10, bottom: 10, right: 10)
+        stackView.spacing = 10
+        return stackView
+    }()
+    
+    private lazy var switchLabel: UILabel = {
+        let label = UILabel()
+        label.text = "Whole Sale"
+        label.font = .systemFont(ofSize: 18)
+        return label
+    }()
+    
+    private let switchDemo : UISwitch = {
+    let sw = UISwitch(frame:CGRect(x: 150, y: 300, width: 0, height: 0))
+    sw.isOn = true
+    sw.setOn(true, animated: true)
+    sw.addTarget(self, action: #selector(switchValueDidChange(_:)), for: .valueChanged)
+    return sw
+    }()
+    
     private lazy var stackViewMinimum: UIStackView = {
         let stackView = UIStackView()
         stackView.axis = .vertical
@@ -62,14 +87,17 @@ class SaringViewController: UIViewController {
     private lazy var minimumLabel: UILabel = {
         let label = UILabel()
         label.text = "Minimum Price"
+        label.font = .systemFont(ofSize: 12)
         return label
     }()
     
     private let minimumTextInput: UITextField = {
         let textField = UITextField()
-        textField.placeholder = "Rp"
+        textField.placeholder = "0"
         textField.keyboardType = .numberPad
         textField.autocorrectionType = .no
+        textField.font = .systemFont(ofSize: 18)
+        textField.textColor = UIColor.darkGray
         textField.autocorrectionType = UITextAutocorrectionType.no
         textField.clearButtonMode = UITextField.ViewMode.whileEditing
         return textField
@@ -86,15 +114,18 @@ class SaringViewController: UIViewController {
     
     private lazy var maximumLabel: UILabel = {
         let label = UILabel()
+        label.font = .systemFont(ofSize: 12)
         label.text = "Maximum Price"
         return label
     }()
     
     private let maximumTextInput: UITextField = {
         let textField = UITextField()
-        textField.placeholder = "Rp"
+        textField.placeholder = "10.0000.000"
         textField.keyboardType = .numberPad
         textField.autocorrectionType = .no
+        textField.font = .systemFont(ofSize: 18)
+        textField.textColor = UIColor.darkGray
         textField.autocorrectionType = UITextAutocorrectionType.no
         textField.clearButtonMode = UITextField.ViewMode.whileEditing
         return textField
@@ -138,12 +169,6 @@ class SaringViewController: UIViewController {
         
         view.backgroundColor = UIColor.white
         
-        let margin: CGFloat = 20.0
-        let width = view.bounds.width - 2.0 * margin
-        rangeSliders.frame = CGRect(x: margin, y: margin + topLayoutGuide.length + 100,
-        width: width, height: 31.0)
-
-        
         let closeBarButtonItem = UIBarButtonItem(barButtonSystemItem: .stop, target: self, action: #selector(close))
         self.navigationItem.leftBarButtonItem  = closeBarButtonItem
         
@@ -161,17 +186,32 @@ class SaringViewController: UIViewController {
 //        let width = view.bounds.width - 2.0 * margin
 //        rangeSliders.frame = CGRect(x: margin, y: margin,
 //                                    width: 100.0, height: 40.0)
+        let numberOfItemsPerRow: CGFloat = 2.0
+        let screenSize: CGRect = UIScreen.main.bounds
+        let widthmin = (screenSize.width) / numberOfItemsPerRow
+        
+        let margin: CGFloat = 20.0
+        let width = view.bounds.width - 2.0 * margin
+        rangeSliders.frame = CGRect(x: margin, y: margin + topLayoutGuide.length + 150,
+        width: width, height: 31.0)
+        
+        stackViewSwitch.addArrangedSubview(switchLabel)
+        stackViewSwitch.addArrangedSubview(switchDemo)
         
         stackViewMinimum.addArrangedSubview(minimumLabel)
         stackViewMinimum.addArrangedSubview(minimumTextInput)
+        stackViewMinimum.widthAnchor.constraint(equalToConstant: widthmin).isActive = true
         stackViewMaximum.addArrangedSubview(maximumLabel)
         stackViewMaximum.addArrangedSubview(maximumTextInput)
+        
+        stackViewMaximum.widthAnchor.constraint(equalToConstant: widthmin).isActive = true
         stackViewMinimumMaximum.addArrangedSubview(stackViewMinimum)
         stackViewMinimumMaximum.addArrangedSubview(stackViewMaximum)
         stackView.addArrangedSubview(stackViewMinimumMaximum)
-//        stackView.addArrangedSubview(rangeSliders)
         
+
         self.view.addSubview(stackView)
+        self.view.addSubview(stackViewSwitch)
         self.view.addSubview(rangeSliders)
         
         buttonSearch.setTitle("Search", for: .normal)
@@ -181,8 +221,15 @@ class SaringViewController: UIViewController {
         stackView.topAnchor.constraint(equalTo: self.view.topAnchor).isActive = true
         stackView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor).isActive = true
         stackView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor).isActive = true
-        stackView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor).isActive = true
+        stackView.bottomAnchor.constraint(equalTo: stackViewSwitch.topAnchor).isActive = true
         stackView.isLayoutMarginsRelativeArrangement = true
+        
+        stackViewSwitch.translatesAutoresizingMaskIntoConstraints = false
+        stackViewSwitch.topAnchor.constraint(equalTo: stackView.bottomAnchor).isActive = true
+        stackViewSwitch.leadingAnchor.constraint(equalTo: self.view.leadingAnchor).isActive = true
+        stackViewSwitch.trailingAnchor.constraint(equalTo: self.view.trailingAnchor).isActive = true
+//        stackViewSwitch.bottomAnchor.constraint(equalTo: self.view.bottomAnchor).isActive = true
+        stackViewSwitch.isLayoutMarginsRelativeArrangement = true
         
 //        rangeSliders.translatesAutoresizingMaskIntoConstraints = false
 //        rangeSliders.topAnchor.constraint(equalTo: stackView.bottomAnchor).isActive = true
@@ -199,10 +246,21 @@ class SaringViewController: UIViewController {
 //        resetState()
     }
     
+    @objc func switchValueDidChange(_ sender: UISwitch!) {
+        if (sender.isOn == true){
+            print("on")
+        }
+        else{
+            print("off")
+        }
+    }
+    
     @objc func rangeSliderValueChanged(_ rangeSlider: RangeSlider) {
         let formatter = NumberFormatter()
-        formatter.numberStyle = .currency
-        formatter.locale = Locale(identifier: "id_ID")
+//        formatter.numberStyle = .none
+//        formatter.locale = Locale(identifier: "id_ID")
+        formatter.groupingSeparator = "."
+        formatter.numberStyle = .decimal
         minimumTextInput.text = formatter.string(from: NSNumber(value: Int((rangeSlider.lowerValue * 2000).rounded() * 5000)))
         
         maximumTextInput.text = formatter.string(from: NSNumber(value: Int((rangeSlider.upperValue * 2000).rounded() * 5000)))
