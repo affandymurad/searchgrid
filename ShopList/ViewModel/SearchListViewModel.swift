@@ -11,8 +11,8 @@ import UIKit
 
 class SearchListViewModel: NSObject {
     private let service: SearchServiceProtocol
-    private var searchCellData: [SearchListCellData] = []
-//    var rawSearchs: [Shop] = []
+//    private var searchCellData: [SearchListCellData] = []
+    var rawSearchs: [Shop] = []
 
     // Mark: - View Model Outputs
 //    var onSearchSelectedByID: ((Int) -> Void)?
@@ -29,11 +29,11 @@ class SearchListViewModel: NSObject {
 // MARK: - Table view data source & delegates will be implemented here
 extension SearchListViewModel: UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return searchCellData.count
+        return rawSearchs.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cellData = searchCellData[indexPath.row]
+        let cellData = rawSearchs[indexPath.row]
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SearchCollectionViewCell.reuseIdentifier, for: indexPath) as! SearchCollectionViewCell
         cell.configureCell(with: cellData)
         return cell

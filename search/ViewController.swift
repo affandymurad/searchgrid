@@ -12,9 +12,22 @@ import RxCocoa
 
 class ViewController: UIViewController {
     
+    let disposeBag = DisposeBag()
+    
+    var x = 0
+    
+   let didScrollReachBottomTrigger = PublishSubject<Void>()
+    
     @objc func pressed() {
         let vc = SaringViewController()
         self.navigationController?.pushViewController(vc, animated: true)
+    }
+    
+    func reloadMore() {
+        let a = NetworkSearchService().reactiveFetchSearchs(start: String(self.viewModel.start), rows: String(self.viewModel.rows))
+        self.didScrollReachBottomTrigger.onNext(a.subscribe(onNext: {result in
+            SearchListViewModel.init().rawSearchs.append(contentsOf: result)
+        }).disposed(by: disposeBag))
     }
     
     private let collectionView: UICollectionView = {
@@ -23,7 +36,7 @@ class ViewController: UIViewController {
     
         let layout = UICollectionViewFlowLayout()
         let width = (screenSize.width) / numberOfItemsPerRow
-        let height = (screenSize.height) / 3.0
+        let height = (screenSize.height) / numberOfItemsPerRow
         layout.itemSize = CGSize(width: width, height: height)
         layout.scrollDirection = .vertical
         layout.minimumInteritemSpacing = 0
@@ -50,11 +63,9 @@ class ViewController: UIViewController {
     
     private let viewModel = ReactiveSearchListViewModel()
     
-    let disposeBag = DisposeBag()
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        viewModel.start = 0
-        viewModel.rows = 10
         
         self.setupView()
         self.setupViewModel()
@@ -75,7 +86,6 @@ class ViewController: UIViewController {
             collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             collectionView.topAnchor.constraint(equalTo: view.topAnchor),
-//            collectionView.widthAnchor.constraint(equalToConstant: view.frame.width),
             collectionView.bottomAnchor.constraint(equalTo: applyButton.topAnchor),
             
             
@@ -89,17 +99,24 @@ class ViewController: UIViewController {
         collectionView.refreshControl = refreshControl
     }
     
-    private func setupViewModel(){
+    func setupViewModel(){
         
-        
-        let input = ReactiveSearchListViewModel.Input(didLoadTriger: .just(()), didTapCellTriger: collectionView.rx.itemSelected.asDriver(), pullToRefreshTrigger: refreshControl.rx.controlEvent(.allEvents).asDriver(), didScrollReachBottom: .just(()))
-        
+        let input = ReactiveSearchListViewModel.Input(didLoadTriger: .just(()), didTapCellTriger:  collectionView.rx.itemSelected.asDriver(), pullToRefreshTrigger: refreshControl.rx.controlEvent(.allEvents).asDriver(), didScrollReachBottom:didScrollReachBottomTrigger.asObserver().asDriver(onErrorJustReturn: ()))
+
         let output = viewModel.transform(input: input)
         
         
-        output.searchListCellData.drive(collectionView.rx.items(cellIdentifier: SearchCollectionViewCell.reuseIdentifier, cellType: SearchCollectionViewCell.self)){
+        
+        
+//        output.searchListCellData.drive(collectionView.rx.items(cellIdentifier: SearchCollectionViewCell.reuseIdentifier, cellType: SearchCollectionViewCell.self)){
+//            row, model, cell in cell.configureCell(with: model)
+//        }.disposed(by: disposeBag)
+        
+        
+        output.searchListCellData.drive(collectionView.rx.items (cellIdentifier: SearchCollectionViewCell.reuseIdentifier, cellType: SearchCollectionViewCell.self)){
             row, model, cell in cell.configureCell(with: model)
         }.disposed(by: disposeBag)
+    
         
         output.errorData.drive(onNext: {errorMessage in print ("error nih", errorMessage)}).disposed(by: disposeBag)
         
@@ -107,83 +124,60 @@ class ViewController: UIViewController {
         
         output.isLoading.drive(refreshControl.rx.isRefreshing).disposed(by: disposeBag)
         
+        
+        
     }
+    
+
 
 }
 
 extension ViewController: UIScrollViewDelegate {
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        if(scrollView.contentOffset.y == scrollView.frame.size.height)       {
-        // You have reached page 1
-            scrollingFinished(scrollView: scrollView)
+    
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+            var verticalOffsetForTop: CGFloat {
+            let topInset = scrollView.contentInset.top
+            return -topInset
         }
-    }
-    
-//    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
-//        if decelerate {
-//            //didEndDecelerating will be called for sure
-//            print("decelerate")
-//            return
-//        }
-//        else {
-//            scrollingFinished(scrollView: scrollView)
-////            scrollingFinished(scrollView: scrollView)
-//        }
-//    }
-    
-    
-    
-  func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-//    if scrollView == collectionView {
-//        print("collectionview")
-//      if (scrollView.bounds.maxY) == scrollView.contentSize.height{
-//           scrollingFinished(scrollView: scrollView)
-    
 
-    var verticalOffsetForTop: CGFloat {
-        let topInset = scrollView.contentInset.top
-        return -topInset
-    }
-
-    var verticalOffsetForBottom: CGFloat {
-        let scrollViewHeight = scrollView.bounds.height
-        let scrollContentSizeHeight = scrollView.contentSize.height
-        let bottomInset = scrollView.contentInset.bottom
-        let scrollViewBottomOffset = scrollContentSizeHeight + bottomInset - scrollViewHeight
-        return scrollViewBottomOffset
-    }
-    
-    var isAtTop: Bool {
-        return scrollView.contentOffset.y <= verticalOffsetForTop
-    }
-
-    var isAtBottom: Bool {
-        return scrollView.contentOffset.y >= verticalOffsetForBottom
-    }
-
-    if isAtTop
-    {
-        // then we are at the top
-        print("awal")
-    }
-    else if isAtBottom
-    {
-        // then we are at the end
-//        print("terakhir")
-        viewModel.start = 0
-        viewModel.rows = 10
+        var verticalOffsetForBottom: CGFloat {
+            let scrollViewHeight = scrollView.bounds.height
+            let scrollContentSizeHeight = scrollView.contentSize.height
+            let bottomInset = scrollView.contentInset.bottom
+            let scrollViewBottomOffset = scrollContentSizeHeight + bottomInset - scrollViewHeight
+            return scrollViewBottomOffset
+        }
         
-        setupViewModel()
+        var isAtTop: Bool {
+            return scrollView.contentOffset.y <= verticalOffsetForTop
+        }
+
+        var isAtBottom: Bool {
+            return scrollView.contentOffset.y >= verticalOffsetForBottom
+        }
+
+        if isAtTop
+        {
+            x = 0
+           viewModel.start = x
+            x = x + 10
+           viewModel.rows = x
+            print("awal")
+        }
+        else if isAtBottom
+        {
+            // then we are at the end
+            viewModel.start = x
+             x = x + 10
+            viewModel.rows = x
+            
+            print("terakhir")
+            reloadMore()
+        
+        }
         
     }
-//        }
-//    }
-  }
     
-    func scrollingFinished(scrollView: UIScrollView) {
-       // Your code
-        print("terakhir")
-    }
 }
 
 

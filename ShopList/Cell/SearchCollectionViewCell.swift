@@ -9,13 +9,8 @@
 import UIKit
 import Kingfisher
 
-struct SearchListCellData {
-    let imageURL: String
-    let name: String
-    let price: String
-}
-
 class SearchCollectionViewCell: UICollectionViewCell {
+    
     private let profileImageView: UIImageView = {
         let image = UIImageView()
         image.clipsToBounds = true
@@ -80,10 +75,10 @@ class SearchCollectionViewCell: UICollectionViewCell {
         
     }
     
-    func configureCell(with data: SearchListCellData) {
-        profileImageView.kf.setImage(with: URL(string: data.imageURL))
-        nameLabel.text = data.name
-        priceLabel.text = data.price
+    func configureCell(with data: Shop) {
+        profileImageView.kf.setImage(with: URL(string: data.imageUri!))
+        nameLabel.text = data.name!
+        priceLabel.text = data.price!
     }
     
 }

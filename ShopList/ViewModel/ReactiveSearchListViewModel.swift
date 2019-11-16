@@ -14,7 +14,8 @@ class ReactiveSearchListViewModel: ViewModelType {
     let service: SearchServiceProtocol
     var start = 0
     var rows = 0
-    var rawSearchs: [Shop] = []
+//    var rawSearchs: [Shop] = []
+    let didScrollbottomTrigger = PublishSubject<Void>()
     
     init(service: SearchServiceProtocol = NetworkSearchService()) {
         self.service = service
@@ -28,9 +29,9 @@ class ReactiveSearchListViewModel: ViewModelType {
     }
     
     struct Output {
-        let searchListCellData: Driver<[SearchListCellData]>
+        let searchListCellData: Driver<[Shop]>
         let errorData: Driver<String>
-        let selectedIndex: Driver<(index: IndexPath, model: SearchListCellData)>
+        let selectedIndex: Driver<(index: IndexPath, model: Shop)>
         let isLoading: Driver<Bool>
     }
     
@@ -38,7 +39,7 @@ class ReactiveSearchListViewModel: ViewModelType {
         let errorMessage = PublishSubject<String>()
         let isLoading = BehaviorRelay<Bool>(value: false)
         
-        let fetchDataTrigger = Driver.merge(input.didLoadTriger, input.pullToRefreshTrigger)
+        let fetchDataTrigger = Driver.merge(input.didLoadTriger, input.pullToRefreshTrigger, input.didScrollReachBottom)
         
         let fetchData = fetchDataTrigger.do(onNext:{
             _ in isLoading.accept(true)
@@ -48,33 +49,18 @@ class ReactiveSearchListViewModel: ViewModelType {
                 .reactiveFetchSearchs(start: String(self.start), rows: String(self.rows))
                 .do(onNext:{result in
                     isLoading.accept(false)
-                    self.rawSearchs.append(contentsOf: result)
                 }, onError: {error in errorMessage.onNext(error.localizedDescription)
                     isLoading.accept(false)
                 })
             .asDriver{_ -> Driver<[Shop]> in Driver.empty()}
         }
         
-            
-            
-//            .map{
-//            searchs -> [SearchListCellData] in searchs.map{
-//                search -> SearchListCellData in SearchListCellData(imageURL: search.imageUri!, name: search.name!, price: search.price!)
-//            }
-//        }
-        
-        let searchListCellData = fetchData.map{
-            searchs -> [SearchListCellData] in searchs.map{
-                search -> SearchListCellData in SearchListCellData(imageURL: search.imageUri!, name: search.name!, price: search.price!)
-            }
-        }
-        
         let errorMessageDriver = errorMessage.asDriver(onErrorJustReturn: "").filter{$0.isEmpty}
         
-        let selectedIndexCell = input.didTapCellTriger.withLatestFrom(searchListCellData) {index, searchs -> (index: IndexPath, model: SearchListCellData) in return (index: index, model: searchs[index.row])
+        let selectedIndexCell = input.didTapCellTriger.withLatestFrom(fetchData) {index, searchs -> (index: IndexPath, model: Shop) in return (index: index, model: searchs[index.row])
         }
         
-        return Output(searchListCellData: searchListCellData, errorData: errorMessageDriver, selectedIndex: selectedIndexCell, isLoading: isLoading.asDriver())
+        return Output(searchListCellData: fetchData, errorData: errorMessageDriver, selectedIndex: selectedIndexCell, isLoading: isLoading.asDriver())
     }
     
     
