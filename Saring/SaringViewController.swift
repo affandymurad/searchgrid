@@ -16,6 +16,20 @@ class SaringViewController: UIViewController {
     let min = 0.0
     let max = 100000000.0
     
+    private let saringButton : UIButton =  {
+        let statusBarSize = UIApplication.shared.statusBarFrame.size
+        let statusBarHeight = Swift.min(statusBarSize.width, statusBarSize.height)
+        let btn = UIButton(frame: CGRect(x: 0, y: UIScreen.main.bounds.height - 30.0 - statusBarHeight, width: UIScreen.main.bounds.width, height: 50))
+        btn.backgroundColor = .clover
+        btn.addTarget(self, action: #selector(pressed), for: .touchUpInside)
+        btn.setTitle("Apply", for: .normal)
+        return btn
+    }()
+    
+    @objc func pressed() {
+        navigationController?.popToRootViewController(animated: true)
+    }
+    
     let rangeSliders : RangeSlider = {
         let rangeSlider = RangeSlider(frame: CGRect.zero)
         rangeSlider.trackTintColor = .lightGray
@@ -50,36 +64,12 @@ class SaringViewController: UIViewController {
         return stackView
     }()
     
-    private lazy var stackViewSwitch: UIStackView = {
-        let stackView = UIStackView()
-        stackView.axis = .horizontal
-        stackView.alignment = .leading
-        stackView.distribution = .fill
-        stackView.layoutMargins = UIEdgeInsets(top: 100, left: 10, bottom: 10, right: 10)
-        stackView.spacing = 10
-        return stackView
-    }()
-    
-    private lazy var switchLabel: UILabel = {
-        let label = UILabel()
-        label.text = "Whole Sale"
-        label.font = .systemFont(ofSize: 18)
-        return label
-    }()
-    
-    private let switchDemo : UISwitch = {
-    let sw = UISwitch(frame:CGRect(x: 150, y: 300, width: 0, height: 0))
-    sw.isOn = true
-    sw.setOn(true, animated: true)
-    sw.addTarget(self, action: #selector(switchValueDidChange(_:)), for: .valueChanged)
-    return sw
-    }()
-    
     private lazy var stackViewMinimum: UIStackView = {
         let stackView = UIStackView()
         stackView.axis = .vertical
         stackView.alignment = .leading
         stackView.distribution = .fill
+        stackView.layoutMargins = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
         stackView.spacing = 10
         return stackView
     }()
@@ -108,6 +98,7 @@ class SaringViewController: UIViewController {
         stackView.axis = .vertical
         stackView.alignment = .trailing
         stackView.distribution = .fill
+        stackView.layoutMargins = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
         stackView.spacing = 10
         return stackView
     }()
@@ -131,35 +122,89 @@ class SaringViewController: UIViewController {
         return textField
     }()
     
+        private lazy var stackViewSwitch: UIStackView = {
+        let stackView = UIStackView()
+        stackView.axis = .horizontal
+        stackView.alignment = .leading
+        stackView.distribution = .fill
+        stackView.layoutMargins = UIEdgeInsets(top: 100, left: 10, bottom: 10, right: 10)
+        stackView.spacing = 10
+        return stackView
+    }()
     
-    private let buttonSearch = UIButton.init(type: .system)
-    
-
-    
-    private lazy var ageLabel: UILabel = {
+    private lazy var switchLabel: UILabel = {
         let label = UILabel()
-        label.text = "Age: -"
+        label.text = "Whole Sale"
+        label.font = .systemFont(ofSize: 18)
         return label
     }()
     
-    private lazy var positionLabel: UILabel = {
+    private let switchDemo : UISwitch = {
+    let sw = UISwitch(frame:CGRect(x: 150, y: 300, width: 0, height: 0))
+    sw.isOn = true
+    sw.setOn(true, animated: true)
+    sw.addTarget(self, action: #selector(switchValueDidChange(_:)), for: .valueChanged)
+    return sw
+    }()
+    
+    private lazy var stackViewSearch: UIStackView = {
+        let stackView = UIStackView()
+        stackView.axis = .vertical
+        stackView.alignment = .leading
+        stackView.distribution = .fill
+        stackView.layoutMargins = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
+        stackView.spacing = 10
+        return stackView
+    }()
+    
+    private lazy var searchLabel: UILabel = {
         let label = UILabel()
-        label.text = "Position: -"
+        label.text = "Search"
+        label.font = .systemFont(ofSize: 18)
         return label
     }()
+    
+    private let searchTextInput: UITextField = {
+        let textField = UITextField()
+        textField.placeholder = "Samsung"
+        textField.autocorrectionType = .no
+        textField.font = .systemFont(ofSize: 18)
+        textField.textColor = UIColor.darkGray
+        textField.autocorrectionType = UITextAutocorrectionType.no
+        textField.clearButtonMode = UITextField.ViewMode.whileEditing
+        return textField
+    }()
+    
+    private lazy var stackViewCloud: UIStackView = {
+        let stackView = UIStackView()
+        stackView.axis = .horizontal
+        stackView.alignment = .leading
+        stackView.distribution = .fill
+        stackView.layoutMargins = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
+        stackView.spacing = 10
+        return stackView
+    }()
+    
+    private lazy var cloudLabel: UIButton = {
+        let btn = UIButton(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width - 20, height: 50))
+        btn.backgroundColor = .white
+        btn.setTitleColor(.black, for: .normal)
+        btn.contentEdgeInsets = UIEdgeInsets(top: 12, left: 0, bottom: 0, right: 0)
+        btn.contentHorizontalAlignment = .left
+        btn.addTarget(self, action: #selector(openToko), for: .touchUpInside)
+        btn.setTitle("Shop Type", for: .normal)
+        return btn
+    }()
+    
+    
+    
+ 
     
     private let disposeBag = DisposeBag()
 
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
-    
-
-//        searchTextInput.rx.text
-//            .subscribe(self.positionLabel.rx.text)
-//            .disposed(by: disposeBag)
-        
-        buttonSearch.rx.tap.subscribe(onNext: {_ in print("tap action")}).disposed(by: disposeBag)
     }
 
     
@@ -174,18 +219,7 @@ class SaringViewController: UIViewController {
         
         let resetBarButtonItem = UIBarButtonItem(title: "Reset", style: .plain, target: self, action: #selector(reset))
         self.navigationItem.rightBarButtonItem  = resetBarButtonItem
-        
-//        stackView.addArrangedSubview(nameLabel)
-//        stackView.addArrangedSubview(searchTextInput)
-        
-//        stackView.addArrangedSubview(buttonSearch)
-//        stackView.addArrangedSubview(ageLabel)
-//        stackView.addArrangedSubview(positionLabel)
 
-//        let margin: CGFloat = 20.0
-//        let width = view.bounds.width - 2.0 * margin
-//        rangeSliders.frame = CGRect(x: margin, y: margin,
-//                                    width: 100.0, height: 40.0)
         let numberOfItemsPerRow: CGFloat = 2.0
         let screenSize: CGRect = UIScreen.main.bounds
         let widthmin = (screenSize.width) / numberOfItemsPerRow
@@ -194,6 +228,17 @@ class SaringViewController: UIViewController {
         let width = view.bounds.width - 2.0 * margin
         rangeSliders.frame = CGRect(x: margin, y: margin + topLayoutGuide.length + 150,
         width: width, height: 31.0)
+        
+        let disclosure = UITableViewCell()
+        disclosure.frame = cloudLabel.bounds
+        disclosure.accessoryType = .disclosureIndicator
+        disclosure.isUserInteractionEnabled = false
+        cloudLabel.addSubview(disclosure)
+        
+        stackViewSearch.addArrangedSubview(searchLabel)
+        stackViewSearch.addArrangedSubview(searchTextInput)
+        
+        stackViewCloud.addArrangedSubview(cloudLabel)
         
         stackViewSwitch.addArrangedSubview(switchLabel)
         stackViewSwitch.addArrangedSubview(switchDemo)
@@ -213,9 +258,9 @@ class SaringViewController: UIViewController {
         self.view.addSubview(stackView)
         self.view.addSubview(stackViewSwitch)
         self.view.addSubview(rangeSliders)
-        
-        buttonSearch.setTitle("Search", for: .normal)
-        buttonSearch.widthAnchor.constraint(equalToConstant: 100).isActive = true
+        self.view.addSubview(stackViewSearch)
+        self.view.addSubview(stackViewCloud)
+        self.view.addSubview(saringButton)
         
         stackView.translatesAutoresizingMaskIntoConstraints = false
         stackView.topAnchor.constraint(equalTo: self.view.topAnchor).isActive = true
@@ -228,18 +273,37 @@ class SaringViewController: UIViewController {
         stackViewSwitch.topAnchor.constraint(equalTo: stackView.bottomAnchor).isActive = true
         stackViewSwitch.leadingAnchor.constraint(equalTo: self.view.leadingAnchor).isActive = true
         stackViewSwitch.trailingAnchor.constraint(equalTo: self.view.trailingAnchor).isActive = true
-//        stackViewSwitch.bottomAnchor.constraint(equalTo: self.view.bottomAnchor).isActive = true
+        stackViewSwitch.bottomAnchor.constraint(equalTo: stackViewSearch.topAnchor).isActive = true
         stackViewSwitch.isLayoutMarginsRelativeArrangement = true
         
-//        rangeSliders.translatesAutoresizingMaskIntoConstraints = false
-//        rangeSliders.topAnchor.constraint(equalTo: stackView.bottomAnchor).isActive = true
-//        rangeSliders.leadingAnchor.constraint(equalTo: self.view.leadingAnchor).isActive = true
-//        rangeSliders.trailingAnchor.constraint(equalTo: self.view.trailingAnchor).isActive = true
-//        stackView.directionalLayoutMargins = NSDirectionalEdgeInsets(top: 20, leading: 20, bottom: 20, trailing: 20)
+        stackViewSearch.translatesAutoresizingMaskIntoConstraints = false
+        stackViewSearch.topAnchor.constraint(equalTo: stackViewSwitch.bottomAnchor).isActive = true
+        stackViewSearch.leadingAnchor.constraint(equalTo: self.view.leadingAnchor).isActive = true
+        stackViewSearch.trailingAnchor.constraint(equalTo: self.view.trailingAnchor).isActive = true
+//        stackViewSwitch.bottomAnchor.constraint(equalTo: self.view.bottomAnchor).isActive = true
+        stackViewSearch.isLayoutMarginsRelativeArrangement = true
+        
+        stackViewCloud.translatesAutoresizingMaskIntoConstraints = false
+        stackViewCloud.topAnchor.constraint(equalTo: stackViewSearch.bottomAnchor).isActive = true
+        stackViewCloud.leadingAnchor.constraint(equalTo: self.view.leadingAnchor).isActive = true
+        stackViewCloud.trailingAnchor.constraint(equalTo: self.view.trailingAnchor).isActive = true
+//        stackViewSwitch.bottomAnchor.constraint(equalTo: self.view.bottomAnchor).isActive = true
+        stackViewCloud.isLayoutMarginsRelativeArrangement = true
+        
+
+        saringButton.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
+        saringButton.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
+//        saringButton.topAnchor.constraint(equalTo: stackViewSwitch.bottomAnchor).isActive = true
+        saringButton.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
     }
 
     @objc func close(){
         navigationController?.popToRootViewController(animated: true)
+    }
+    
+    @objc func openToko(){
+        let vc = TokoViewController()
+        self.navigationController?.pushViewController(vc, animated: true)
     }
     
     @objc func reset(){

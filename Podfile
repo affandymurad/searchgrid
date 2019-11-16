@@ -12,6 +12,7 @@ target 'search' do
   pod 'Moya'
   pod 'Kingfisher'  
   pod 'WARangeSlider'
+  pod 'IQKeyboardManagerSwift'
 
   target 'searchTests' do
     inherit! :search_paths

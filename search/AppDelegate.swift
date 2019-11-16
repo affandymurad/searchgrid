@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import IQKeyboardManagerSwift
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -18,20 +19,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         
-//        window = UIWindow()
-//
-//        let vc = UINavigationController(rootViewController: ViewController())
-//        window?.rootViewController = vc
-//        window?.makeKeyAndVisible()
-//        navController = UINavigationController()
-//        let viewController: ViewController = ViewController()
-//        self.navController!.pushViewController(viewController, animated: false)
-//
-//        window = UIWindow(frame: UIScreen.main.bounds)
-//        let mainVC = ViewController() as UIViewController
-//        navController = UINavigationController(rootViewController: mainVC)
-//        self.window!.backgroundColor = UIColor.white
-//        self.window!.rootViewController = navController
+        IQKeyboardManager.shared.enable = true
         
         
         self.window = UIWindow(frame: UIScreen.main.bounds)

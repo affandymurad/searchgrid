@@ -12,9 +12,10 @@ import RxCocoa
 
 class ViewController: UIViewController {
     
-    let disposeBag = DisposeBag()
-    
+    let viewModel = ReactiveSearchListViewModel()
     var x = 0
+
+    let disposeBag = DisposeBag()
     
    let didScrollReachBottomTrigger = PublishSubject<Void>()
     
@@ -23,10 +24,21 @@ class ViewController: UIViewController {
         self.navigationController?.pushViewController(vc, animated: true)
     }
     
+
     func reloadMore() {
+
+        viewModel.start = x
+         x = x + 10
+        
         let a = NetworkSearchService().reactiveFetchSearchs(start: String(self.viewModel.start), rows: String(self.viewModel.rows))
         self.didScrollReachBottomTrigger.onNext(a.subscribe(onNext: {result in
-            SearchListViewModel.init().rawSearchs.append(contentsOf: result)
+            
+            self.viewModel.privateDataSource.value.append(contentsOf: result)
+//            self.privateDataSource.value.append("Item")
+//            self.rawSearchs.append(contentsOf: result)
+//            self.collectionView.reloadData()
+            print("jumlah \(self.viewModel.privateDataSource.value.count)")
+//            self.collectionView.reloadData()
         }).disposed(by: disposeBag))
     }
     
@@ -42,7 +54,6 @@ class ViewController: UIViewController {
         layout.minimumInteritemSpacing = 0
         layout.minimumLineSpacing = 0
         let cv = UICollectionView(frame: CGRect.zero, collectionViewLayout: layout)
-        cv.register(SearchCollectionViewCell.self, forCellWithReuseIdentifier: SearchCollectionViewCell.reuseIdentifier)
         cv.backgroundColor = .white
         cv.translatesAutoresizingMaskIntoConstraints = false
         cv.isScrollEnabled = true
@@ -60,8 +71,7 @@ class ViewController: UIViewController {
     }()
     
     let refreshControl = UIRefreshControl()
-    
-    private let viewModel = ReactiveSearchListViewModel()
+
     
 
     override func viewDidLoad() {
@@ -78,9 +88,7 @@ class ViewController: UIViewController {
         
         view.addSubview(collectionView)
         view.addSubview(applyButton)
-        
-        collectionView.rx.setDelegate(self).disposed(by: disposeBag)
-
+    
         
         NSLayoutConstraint.activate([
             collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
@@ -100,31 +108,23 @@ class ViewController: UIViewController {
     }
     
     func setupViewModel(){
+        collectionView.rx.setDelegate(self).disposed(by: disposeBag)
+        self.collectionView.register(SearchCollectionViewCell.self, forCellWithReuseIdentifier: SearchCollectionViewCell.reuseIdentifier)
         
         let input = ReactiveSearchListViewModel.Input(didLoadTriger: .just(()), didTapCellTriger:  collectionView.rx.itemSelected.asDriver(), pullToRefreshTrigger: refreshControl.rx.controlEvent(.allEvents).asDriver(), didScrollReachBottom:didScrollReachBottomTrigger.asObserver().asDriver(onErrorJustReturn: ()))
 
+    
         let output = viewModel.transform(input: input)
         
-        
-        
-        
-//        output.searchListCellData.drive(collectionView.rx.items(cellIdentifier: SearchCollectionViewCell.reuseIdentifier, cellType: SearchCollectionViewCell.self)){
-//            row, model, cell in cell.configureCell(with: model)
-//        }.disposed(by: disposeBag)
-        
-        
-        output.searchListCellData.drive(collectionView.rx.items (cellIdentifier: SearchCollectionViewCell.reuseIdentifier, cellType: SearchCollectionViewCell.self)){
-            row, model, cell in cell.configureCell(with: model)
+        output.searchListCellData.drive(collectionView.rx.items(cellIdentifier: SearchCollectionViewCell.reuseIdentifier, cellType: SearchCollectionViewCell.self)){
+           row, element, cell in
+            cell.configureCell(with: element)
         }.disposed(by: disposeBag)
     
         
         output.errorData.drive(onNext: {errorMessage in print ("error nih", errorMessage)}).disposed(by: disposeBag)
-        
-//        output.selectedIndex.drive(onNext: {(index, model) in print("inih index \(index), model: \(model)")}).disposed(by: disposeBag)
-        
+    
         output.isLoading.drive(refreshControl.rx.isRefreshing).disposed(by: disposeBag)
-        
-        
         
     }
     
@@ -161,16 +161,12 @@ extension ViewController: UIScrollViewDelegate {
             x = 0
            viewModel.start = x
             x = x + 10
-           viewModel.rows = x
+            self.viewModel.privateDataSource.value.removeAll()
             print("awal")
         }
         else if isAtBottom
         {
             // then we are at the end
-            viewModel.start = x
-             x = x + 10
-            viewModel.rows = x
-            
             print("terakhir")
             reloadMore()
         

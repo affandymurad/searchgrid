@@ -13,12 +13,19 @@ import RxCocoa
 class ReactiveSearchListViewModel: ViewModelType {
     let service: SearchServiceProtocol
     var start = 0
-    var rows = 0
+    var rows = 10
+    
+    
 //    var rawSearchs: [Shop] = []
     let didScrollbottomTrigger = PublishSubject<Void>()
     
+
+    let dataSource: Observable<[Shop]>
+    let privateDataSource: Variable<[Shop]> = Variable([])
+    
     init(service: SearchServiceProtocol = NetworkSearchService()) {
         self.service = service
+        self.dataSource = privateDataSource.asObservable()
     }
     
     struct Input {
@@ -52,7 +59,13 @@ class ReactiveSearchListViewModel: ViewModelType {
                 }, onError: {error in errorMessage.onNext(error.localizedDescription)
                     isLoading.accept(false)
                 })
-            .asDriver{_ -> Driver<[Shop]> in Driver.empty()}
+                .asDriver{_ -> Driver<[Shop]> in Driver.empty()}.map{
+                    if (self.start > 0) {
+                        return $0 + self.privateDataSource.value
+                    } else {
+                        return $0
+                    }
+                }
         }
         
         let errorMessageDriver = errorMessage.asDriver(onErrorJustReturn: "").filter{$0.isEmpty}

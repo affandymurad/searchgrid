@@ -10,6 +10,7 @@
 		315560247BA915F7DA731F2A /* Pods_search.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 26F270E6AC2349D72CBB5C46 /* Pods_search.framework */; };
 		623289279ED751D00B0CC3AE /* Pods_searchTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D5EF68D68AC696975E49BFE8 /* Pods_searchTests.framework */; };
 		AA7508750630D8321E6FCA86 /* Pods_search_searchUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67387ACB7D6924CADA20E5C7 /* Pods_search_searchUITests.framework */; };
+		B31E54DB2380049800FDE1E9 /* TokoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B31E54DA2380049800FDE1E9 /* TokoViewController.swift */; };
 		B33F39D0237DBA46006B5227 /* SaringViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B33F39CF237DBA46006B5227 /* SaringViewController.swift */; };
 		B34C83B4237856F400315A8A /* Shop.swift in Sources */ = {isa = PBXBuildFile; fileRef = B34C83B3237856F400315A8A /* Shop.swift */; };
 		B34C83B623785DAB00315A8A /* ShopResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = B34C83B523785DAB00315A8A /* ShopResponse.swift */; };
@@ -26,10 +27,8 @@
 		B3C5FB08237A66B000E7FA50 /* ViewModelType.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3C5FB07237A66B000E7FA50 /* ViewModelType.swift */; };
 		B3C5FB15237A6D9B00E7FA50 /* SearchService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3C5FB14237A6D9A00E7FA50 /* SearchService.swift */; };
 		B3C5FB17237A752800E7FA50 /* ReactiveSearchListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3C5FB16237A752800E7FA50 /* ReactiveSearchListViewModel.swift */; };
-		B3D0D4EC237C5A3F0050B691 /* FilterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3D0D4EB237C5A3F0050B691 /* FilterViewController.swift */; };
 		B3E3873C237BB76C00802DC3 /* UIColorXt.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3E3873B237BB76C00802DC3 /* UIColorXt.swift */; };
 		B3E3873E237BB7EE00802DC3 /* SearchCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3E3873D237BB7EE00802DC3 /* SearchCollectionViewCell.swift */; };
-		B3E38740237BBB4100802DC3 /* SearchListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3E3873F237BBB4100802DC3 /* SearchListViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -56,6 +55,7 @@
 		67387ACB7D6924CADA20E5C7 /* Pods_search_searchUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_search_searchUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8A2EAACB77BE8136CB0F96DC /* Pods-search-searchUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-search-searchUITests.debug.xcconfig"; path = "Target Support Files/Pods-search-searchUITests/Pods-search-searchUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		A43BC86D3270662F19CA11C7 /* Pods-searchTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-searchTests.release.xcconfig"; path = "Target Support Files/Pods-searchTests/Pods-searchTests.release.xcconfig"; sourceTree = "<group>"; };
+		B31E54DA2380049800FDE1E9 /* TokoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokoViewController.swift; sourceTree = "<group>"; };
 		B33F39CF237DBA46006B5227 /* SaringViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SaringViewController.swift; sourceTree = "<group>"; };
 		B34C83B3237856F400315A8A /* Shop.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Shop.swift; sourceTree = "<group>"; };
 		B34C83B523785DAB00315A8A /* ShopResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopResponse.swift; sourceTree = "<group>"; };
@@ -78,10 +78,8 @@
 		B3C5FB07237A66B000E7FA50 /* ViewModelType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModelType.swift; sourceTree = "<group>"; };
 		B3C5FB14237A6D9A00E7FA50 /* SearchService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchService.swift; sourceTree = "<group>"; };
 		B3C5FB16237A752800E7FA50 /* ReactiveSearchListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReactiveSearchListViewModel.swift; sourceTree = "<group>"; };
-		B3D0D4EB237C5A3F0050B691 /* FilterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterViewController.swift; sourceTree = "<group>"; };
 		B3E3873B237BB76C00802DC3 /* UIColorXt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColorXt.swift; sourceTree = "<group>"; };
 		B3E3873D237BB7EE00802DC3 /* SearchCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchCollectionViewCell.swift; sourceTree = "<group>"; };
-		B3E3873F237BBB4100802DC3 /* SearchListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchListViewModel.swift; sourceTree = "<group>"; };
 		C5A016E987D9DC14A904B69C /* Pods-search.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-search.debug.xcconfig"; path = "Target Support Files/Pods-search/Pods-search.debug.xcconfig"; sourceTree = "<group>"; };
 		C85992545B06AE01277B868E /* Pods-search-searchUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-search-searchUITests.release.xcconfig"; path = "Target Support Files/Pods-search-searchUITests/Pods-search-searchUITests.release.xcconfig"; sourceTree = "<group>"; };
 		D5EF68D68AC696975E49BFE8 /* Pods_searchTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_searchTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -125,6 +123,14 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		B31E54D9237FE8B100FDE1E9 /* Toko */ = {
+			isa = PBXGroup;
+			children = (
+				B31E54DA2380049800FDE1E9 /* TokoViewController.swift */,
+			);
+			path = Toko;
+			sourceTree = "<group>";
+		};
 		B34C83B223784AB800315A8A /* model */ = {
 			isa = PBXGroup;
 			children = (
@@ -138,7 +144,8 @@
 		B3B9D4E72377FC3D00663139 = {
 			isa = PBXGroup;
 			children = (
-				B3D0D4EA237C5A150050B691 /* Filter */,
+				B31E54D9237FE8B100FDE1E9 /* Toko */,
+				B3D0D4EA237C5A150050B691 /* Saring */,
 				B3C5FB13237A6D8500E7FA50 /* service */,
 				B3C5FB09237A679900E7FA50 /* ShopList */,
 				B3C5FB06237A669000E7FA50 /* helper */,
@@ -233,7 +240,6 @@
 			isa = PBXGroup;
 			children = (
 				B3C5FB16237A752800E7FA50 /* ReactiveSearchListViewModel.swift */,
-				B3E3873F237BBB4100802DC3 /* SearchListViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -246,13 +252,12 @@
 			path = service;
 			sourceTree = "<group>";
 		};
-		B3D0D4EA237C5A150050B691 /* Filter */ = {
+		B3D0D4EA237C5A150050B691 /* Saring */ = {
 			isa = PBXGroup;
 			children = (
-				B3D0D4EB237C5A3F0050B691 /* FilterViewController.swift */,
 				B33F39CF237DBA46006B5227 /* SaringViewController.swift */,
 			);
-			path = Filter;
+			path = Saring;
 			sourceTree = "<group>";
 		};
 		C93BF24FF4A15D2AAE815882 /* Pods */ = {
@@ -513,15 +518,14 @@
 				B34C83B623785DAB00315A8A /* ShopResponse.swift in Sources */,
 				B3BFF38523790205005236C0 /* NetworkManager.swift in Sources */,
 				B34C83B823785E1A00315A8A /* StatusModel.swift in Sources */,
-				B3E38740237BBB4100802DC3 /* SearchListViewModel.swift in Sources */,
 				B33F39D0237DBA46006B5227 /* SaringViewController.swift in Sources */,
 				B3BFF38723790244005236C0 /* Route.swift in Sources */,
-				B3D0D4EC237C5A3F0050B691 /* FilterViewController.swift in Sources */,
 				B3B9D4F42377FC3D00663139 /* AppDelegate.swift in Sources */,
 				B34C83B4237856F400315A8A /* Shop.swift in Sources */,
 				B3C5FB17237A752800E7FA50 /* ReactiveSearchListViewModel.swift in Sources */,
 				B3C5FB08237A66B000E7FA50 /* ViewModelType.swift in Sources */,
 				B3E3873E237BB7EE00802DC3 /* SearchCollectionViewCell.swift in Sources */,
+				B31E54DB2380049800FDE1E9 /* TokoViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
