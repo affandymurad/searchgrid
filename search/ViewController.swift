@@ -13,39 +13,35 @@ import RxCocoa
 class ViewController: UIViewController {
     
     let viewModel = ReactiveSearchListViewModel()
-//    var x = 0
 
     let disposeBag = DisposeBag()
     
    let didScrollReachBottomTrigger = PublishSubject<Void>()
-    
+        
     @objc func pressed() {
         let vc = SaringViewController()
         self.navigationController?.pushViewController(vc, animated: true)
     }
     
+    func searchNew() {
+        viewModel.start = 0
+        let a = NetworkSearchService().reactiveFetchSearchs(start: String(self.viewModel.start), rows: String(self.viewModel.start))
+                
+        a.subscribe().disposed(by: disposeBag)
+        let nav1 = UINavigationController()
+        let mainView = ViewController() //ViewController = Name of your controller
+        nav1.viewControllers = [mainView]
+        UIApplication.shared.keyWindow?.rootViewController = nav1
+            
+    }
+    
 
     func reloadMore() {
 
-//         x += 10
         viewModel.start += 10
-
-        
-        let a = NetworkSearchService().reactiveFetchSearchs(start: String(self.viewModel.start), rows: String(self.viewModel.rows))
+        let a = NetworkSearchService().reactiveFetchSearchs(start: String(self.viewModel.start), rows: String(self.viewModel.start))
         self.didScrollReachBottomTrigger.onNext(a.subscribe(onNext: {result in
-//            if (self.viewModel.start == 0) {
-//                self.privateDataSource.value.removeAll()
-//            } else {
-//                self.viewModel.privateDataSource.value.append(contentsOf: result)
-//            }
-            
-            
-
-//            self.privateDataSource.value.append("Item")
-//            self.rawSearchs.append(contentsOf: result)
-//            self.collectionView.reloadData()
             print("jumlah \(self.viewModel.privateDataSource.value.count)")
-//            self.collectionView.reloadData()
         }).disposed(by: disposeBag))
     }
     
@@ -88,6 +84,10 @@ class ViewController: UIViewController {
         self.setupViewModel()
         
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+//        NotificationCenter.default.addObserver(self, selector: #selector(searchNew), name: NSNotification.Name(rawValue: "load"), object: nil)
+    }
 
     
     private func setupView() {
@@ -116,9 +116,10 @@ class ViewController: UIViewController {
     
     func setupViewModel(){
         collectionView.rx.setDelegate(self).disposed(by: disposeBag)
+        
         self.collectionView.register(SearchCollectionViewCell.self, forCellWithReuseIdentifier: SearchCollectionViewCell.reuseIdentifier)
         
-        let input = ReactiveSearchListViewModel.Input(didLoadTriger: .just(()), didTapCellTriger:  collectionView.rx.itemSelected.asDriver(), pullToRefreshTrigger: refreshControl.rx.controlEvent(.allEvents).asDriver(), didScrollReachBottom:didScrollReachBottomTrigger.asObserver().asDriver(onErrorJustReturn: ()))
+        let input = ReactiveSearchListViewModel.Input(didLoadTriger:.just(()), didTapCellTriger:  collectionView.rx.itemSelected.asDriver(), pullToRefreshTrigger: refreshControl.rx.controlEvent(.allEvents).asDriver(), didScrollReachBottom:didScrollReachBottomTrigger.asObserver().asDriver(onErrorJustReturn: ()))
 
     
         let output = viewModel.transform(input: input)

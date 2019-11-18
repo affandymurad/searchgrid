@@ -12,10 +12,24 @@ import RxCocoa
 import WARangeSlider
 
 
-class SaringViewController: UIViewController {
-    let min = 0.0
-    let max = 100000000.0
-    var tagsArray = ["Gold Merchant", "Official Store"]
+class SaringViewController: UIViewController, UITextFieldDelegate {
+//    let min = 0.0
+//    let max = 100000000.0
+    var tagsArray = [String]()
+    var isWholeSale = false
+    var isGoldChecked = false
+    var isOfficialChecked = false
+    var searchquery = ""
+    
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        guard let textFieldText = textField.text,
+            let rangeOfTextToReplace = Range(range, in: textFieldText) else {
+                return false
+        }
+        let substringToReplace = textFieldText[rangeOfTextToReplace]
+        let count = textFieldText.count - substringToReplace.count + string.count
+        return count <= 8
+    }
     
     private let saringButton : UIButton =  {
         let statusBarSize = UIApplication.shared.statusBarFrame.size
@@ -27,19 +41,15 @@ class SaringViewController: UIViewController {
         return btn
     }()
     
-    @objc func pressed() {
-        navigationController?.popToRootViewController(animated: true)
-    }
-    
     let rangeSliders : RangeSlider = {
         let rangeSlider = RangeSlider(frame: CGRect.zero)
         rangeSlider.trackTintColor = .lightGray
         rangeSlider.trackHighlightTintColor = .clover
         rangeSlider.thumbTintColor = .white
         rangeSlider.thumbBorderColor = .clover
+        rangeSlider.minimumValue = 0.0
+        rangeSlider.maximumValue = 10000000.0
         rangeSlider.thumbBorderWidth = 2.0
-        rangeSlider.lowerValue = 0.0
-        rangeSlider.upperValue = 10000000.0
         rangeSlider.addTarget(self, action: #selector(rangeSliderValueChanged(_:)), for: .valueChanged)
         return rangeSlider
     }()
@@ -84,13 +94,13 @@ class SaringViewController: UIViewController {
     
     private let minimumTextInput: UITextField = {
         let textField = UITextField()
-        textField.placeholder = "0"
         textField.keyboardType = .numberPad
         textField.autocorrectionType = .no
         textField.font = .systemFont(ofSize: 18)
         textField.textColor = UIColor.darkGray
         textField.autocorrectionType = UITextAutocorrectionType.no
         textField.clearButtonMode = UITextField.ViewMode.whileEditing
+//        textField.addTarget(self, action: #selector(myTextFieldDidChange), for: .editingChanged)
         return textField
     }()
     
@@ -113,12 +123,12 @@ class SaringViewController: UIViewController {
     
     private let maximumTextInput: UITextField = {
         let textField = UITextField()
-        textField.placeholder = "10.0000.000"
         textField.keyboardType = .numberPad
         textField.autocorrectionType = .no
         textField.font = .systemFont(ofSize: 18)
         textField.textColor = UIColor.darkGray
         textField.autocorrectionType = UITextAutocorrectionType.no
+//        textField.addTarget(self, action: #selector(myTextFieldDidChange), for: .editingChanged)
         textField.clearButtonMode = UITextField.ViewMode.whileEditing
         return textField
     }()
@@ -167,7 +177,6 @@ class SaringViewController: UIViewController {
     
     private let searchTextInput: UITextField = {
         let textField = UITextField()
-        textField.placeholder = "Samsung"
         textField.autocorrectionType = .no
         textField.font = .systemFont(ofSize: 18)
         textField.textColor = UIColor.darkGray
@@ -206,7 +215,12 @@ class SaringViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
-        createTagCloud(OnView: self.view, withArray: tagsArray as [AnyObject])
+        minimumTextInput.delegate = self
+        maximumTextInput.delegate = self
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        initialValue()
     }
 
     
@@ -236,6 +250,9 @@ class SaringViewController: UIViewController {
         disclosure.accessoryType = .disclosureIndicator
         disclosure.isUserInteractionEnabled = false
         cloudLabel.addSubview(disclosure)
+        
+        maximumTextInput.delegate = self
+        minimumTextInput.delegate = self
         
         stackViewSearch.addArrangedSubview(searchLabel)
         stackViewSearch.addArrangedSubview(searchTextInput)
@@ -309,27 +326,48 @@ class SaringViewController: UIViewController {
     }
     
     @objc func reset(){
-//        resetState()
+        tagsArray.removeAll()
+        
+        isWholeSale = false
+        switchDemo.setOn(self.isWholeSale, animated: true)
+        
+        let formatter = NumberFormatter()
+        formatter.groupingSeparator = "."
+        formatter.numberStyle = .decimal
+        
+        let valueMin = Double("0.0")
+        let valueMax = Double("10000000.0")
+        
+        minimumTextInput.text = formatter.string(from: NSNumber(value: valueMin ?? 0.0))
+        maximumTextInput.text = formatter.string(from: NSNumber(value: valueMax ?? 10000000.0))
+        
+        rangeSliders.lowerValue = 0.0
+        rangeSliders.upperValue = 10000000.0
+        
+        searchquery = "Samsung"
+        
+        isGoldChecked = false
+        isOfficialChecked = false
+        createTagCloud(OnView: self.view, withArray: tagsArray as [AnyObject])
     }
     
     @objc func switchValueDidChange(_ sender: UISwitch!) {
         if (sender.isOn == true){
-            print("on")
+            self.isWholeSale = true
         }
         else{
-            print("off")
+            self.isWholeSale = false
         }
     }
     
     @objc func rangeSliderValueChanged(_ rangeSlider: RangeSlider) {
         let formatter = NumberFormatter()
-//        formatter.numberStyle = .none
-//        formatter.locale = Locale(identifier: "id_ID")
         formatter.groupingSeparator = "."
         formatter.numberStyle = .decimal
-        minimumTextInput.text = formatter.string(from: NSNumber(value: Int((rangeSlider.lowerValue * 2000).rounded() * 5000)))
         
-        maximumTextInput.text = formatter.string(from: NSNumber(value: Int((rangeSlider.upperValue * 2000).rounded() * 5000)))
+        minimumTextInput.text = formatter.string(from: NSNumber(value: Int(round(rangeSlider.lowerValue / 500) * 500)))
+         
+         maximumTextInput.text = formatter.string(from: NSNumber(value: Int(round(rangeSlider.upperValue / 500) * 500)))
     }
     
     
@@ -381,33 +419,120 @@ class SaringViewController: UIViewController {
     }
     
     @objc func removeTag(_ sender: AnyObject) {
-        tagsArray.remove(at: (sender.tag - 1))
+        let name = self.tagsArray[sender.tag - 1]
+        
+        if (name.elementsEqual("Official Store")){
+           self.isOfficialChecked = false
+        }
+
+        if (name.elementsEqual("Gold Merchant"))
+        {
+            self.isGoldChecked = false
+        }
+        self.tagsArray.remove(at: (sender.tag - 1))
         createTagCloud(OnView: self.view, withArray: tagsArray as [AnyObject])
     }
     
-    @IBAction func addTag(_ sender: AnyObject) {
+    
+    func initialValue() {
+        let q_v = UserDefaults.standard.string(forKey: "q") ?? "Samsung"
+        let pmin_v = UserDefaults.standard.string(forKey: "pmin") ?? "0"
+        let pmax_v = UserDefaults.standard.string(forKey: "pmax") ?? "10000000"
+        let wholesale_v = UserDefaults.standard.bool(forKey: "wholesale")
+        let official_v = UserDefaults.standard.bool(forKey: "official")
+        let fshop_v = UserDefaults.standard.bool(forKey: "fshop")
         
-//        if txtInput.text?.count != 0 {
-//            tagsArray.append(txtInput.text!)
-//            createTagCloud(OnView: self.view, withArray: tagsArray as [AnyObject])
-//        }
+        
+        let valueMin = Double(pmin_v)
+        let valueMax = Double(pmax_v)
+        
+        rangeSliders.lowerValue = valueMin ?? 0.0
+        rangeSliders.upperValue = valueMax ?? 0.0
+
+        let formatter = NumberFormatter()
+        formatter.groupingSeparator = "."
+        formatter.numberStyle = .decimal
+        
+        minimumTextInput.text = formatter.string(from: NSNumber(value: valueMin ?? 0.0))
+        maximumTextInput.text = formatter.string(from: NSNumber(value: valueMax ?? 10000000.0))
+        
+        //Wholesale Switch
+        self.isWholeSale = wholesale_v
+        switchDemo.setOn(self.isWholeSale, animated: true)
+        
+        //Search
+        searchquery = q_v
+        searchTextInput.text = searchquery
+        
+        self.isOfficialChecked = official_v
+        
+        self.isGoldChecked = fshop_v
+        
+        if (self.isOfficialChecked == true && !self.tagsArray.contains("Official Store")){
+            self.tagsArray.append("Official Store")
+        }
+        
+        if (self.isOfficialChecked == false && self.tagsArray.contains("Official Store"))
+        {
+            self.tagsArray.removeAll { $0 == "Official Store" }
+        }
+        
+        if (self.isGoldChecked == true && !self.tagsArray.contains("Gold Merchant")){
+            self.tagsArray.append("Gold Merchant")
+        }
+        
+        if (self.isGoldChecked == false && self.tagsArray.contains("Gold Merchant"))
+        {
+            self.tagsArray.removeAll { $0 == "Gold Merchant" }
+        }
+        
+        createTagCloud(OnView: self.view, withArray: tagsArray as [AnyObject])
+        
+    }
+    
+    @objc func pressed() {
+        let formatter = NumberFormatter()
+        formatter.groupingSeparator = "."
+        formatter.numberStyle = .decimal
+        
+        let viewModel = ReactiveSearchListViewModel()
+        
+        if let numberMin = formatter.number(from: minimumTextInput.text ?? "0.0") {
+            let amount = numberMin.decimalValue
+            UserDefaults.standard.set(amount, forKey: "pmin")
+        }
+        
+        if let numberMax = formatter.number(from: maximumTextInput.text ?? "10000000.0") {
+            let amount = numberMax.decimalValue
+            UserDefaults.standard.set(amount, forKey: "pmax")
+        }
+        
+        UserDefaults.standard.set(isWholeSale, forKey: "wholesale")
+        
+        guard let text = searchTextInput.text, !text.isEmpty else {
+            let alert = UIAlertController(title: "Ups", message: "Search must be filled!", preferredStyle: UIAlertController.Style.alert)
+            alert.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default, handler: nil))
+            self.present(alert, animated: true, completion: nil)
+            return
+        }
+        
+        searchquery = text
+        
+        UserDefaults.standard.set(searchquery, forKey: "q")
+        UserDefaults.standard.set(isOfficialChecked, forKey: "official")
+
+        UserDefaults.standard.set(isGoldChecked, forKey: "fshop")
+        
+        viewModel.start = 0
+        viewModel.privateDataSource.value.removeAll()
+
+        let vc = ViewController()
+        vc.searchNew()
+//        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "load"), object: nil)
+        
+        navigationController?.popToRootViewController(animated: true)
     }
 
 }
 
-
-extension String {
-    
-    func widthOfString(usingFont font: UIFont) -> CGFloat {
-        let fontAttributes = [NSAttributedString.Key.font: font]
-        let size = self.size(withAttributes: fontAttributes)
-        return size.width
-    }
-    
-    func heightOfString(usingFont font: UIFont) -> CGFloat {
-        let fontAttributes = [NSAttributedString.Key.font: font]
-        let size = self.size(withAttributes: fontAttributes)
-        return size.height
-    }
-}
 

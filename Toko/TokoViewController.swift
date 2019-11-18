@@ -13,11 +13,11 @@ import RxCocoa
 class TokoViewController: UIViewController {
     
     var isGoldChecked = false
-
+    var isOfficialChecked = false
     
     @objc func buttonGoldClicked(sender: UIButton) {
         isGoldChecked = !isGoldChecked
-        print("\(isGoldChecked)")
+        print("Gold \(isGoldChecked)")
 
         if isGoldChecked {
             sender.setImage(#imageLiteral(resourceName: "ic_check_box"), for: .normal)
@@ -27,12 +27,10 @@ class TokoViewController: UIViewController {
         
     }
     
-    var isOfficialChecked = false
-    
     @objc func buttonOfficialClicked(sender: UIButton) {
 
         isOfficialChecked = !isOfficialChecked
-        print("\(isOfficialChecked)")
+        print("Official \(isOfficialChecked)")
 
         if isOfficialChecked {
             sender.setImage(#imageLiteral(resourceName: "ic_check_box"), for: .normal)
@@ -55,6 +53,8 @@ class TokoViewController: UIViewController {
     }()
     
     @objc func pressed() {
+         UserDefaults.standard.set(isOfficialChecked, forKey: "official")
+         UserDefaults.standard.set(isGoldChecked, forKey: "fshop")
         navigationController?.popViewController(animated: true)
     }
     
@@ -99,6 +99,7 @@ class TokoViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
+        initialValue()
     }
     
     func setupView() {
@@ -136,6 +137,27 @@ class TokoViewController: UIViewController {
         }
         
         @objc func reset(){
-    //        resetState()
+            self.isOfficialChecked = false
+            goldLabel.setImage(#imageLiteral(resourceName: "ic_check_box_outline_blank"), for: .normal)
+            self.isGoldChecked = false
+            officialLabel.setImage(#imageLiteral(resourceName: "ic_check_box_outline_blank"), for: .normal)
         }
+    
+    
+    func initialValue() {
+        self.isOfficialChecked = UserDefaults.standard.bool(forKey: "official")
+        self.isGoldChecked = UserDefaults.standard.bool(forKey: "fshop")
+         
+        if isOfficialChecked {
+            officialLabel.setImage(#imageLiteral(resourceName: "ic_check_box"), for: .normal)
+        } else {
+            officialLabel.setImage(#imageLiteral(resourceName: "ic_check_box_outline_blank"), for:.normal)
+        }
+        
+        if isGoldChecked {
+            goldLabel.setImage(#imageLiteral(resourceName: "ic_check_box"), for: .normal)
+        } else {
+            goldLabel.setImage(#imageLiteral(resourceName: "ic_check_box_outline_blank"), for:.normal)
+        }
+    }
 }

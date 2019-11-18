@@ -20,8 +20,16 @@ protocol SearchServiceProtocol {
 
 class NetworkSearchService: SearchServiceProtocol {
     
+    let q_v = UserDefaults.standard.string(forKey: "q") ?? "Samsung"
+    let pmin_v = UserDefaults.standard.string(forKey: "pmin") ?? "0"
+    let pmax_v = UserDefaults.standard.string(forKey: "pmax") ?? "10000000"
+    let wholesale_v = UserDefaults.standard.bool(forKey: "wholesale")
+    let official_v = UserDefaults.standard.bool(forKey: "official")
+    let fshop_v = UserDefaults.standard.bool(forKey: "fshop")
+    
+    
     func reactiveFetchSearchs(start: String, rows: String) -> Observable<[Shop]> {
-        let response = NetworkManager.sharedInstance.rx.request(.cari(params: .specify(q: "Samsung", pmin: "100000", pmax: "2000000", wholesale: "true", official: "true", fshop: "2", start: start, rows: rows)))
+        let response = NetworkManager.sharedInstance.rx.request(.cari(params: .specify(q: q_v, pmin: pmin_v, pmax: pmax_v, wholesale:String(wholesale_v), official: String(official_v), fshop: String(fshop_v), start: start, rows: rows)))
                     .asObservable()
                     .flatMap{ data -> Observable<ShopResponse> in
                         let decoder = JSONDecoder()

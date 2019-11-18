@@ -55,7 +55,7 @@ class ReactiveSearchListViewModel: ViewModelType {
             .flatMap{
             [service] _ -> Driver<[Shop]> in
                 service
-                .reactiveFetchSearchs(start: String(self.start), rows: String(self.rows))
+                    .reactiveFetchSearchs(start: String(self.start), rows: String(self.rows))
                 .do(onNext:{result in
                     isLoading.accept(false)
                 if (self.start == 0) {

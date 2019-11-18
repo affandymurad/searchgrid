@@ -27,7 +27,7 @@
 		B3C5FB08237A66B000E7FA50 /* ViewModelType.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3C5FB07237A66B000E7FA50 /* ViewModelType.swift */; };
 		B3C5FB15237A6D9B00E7FA50 /* SearchService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3C5FB14237A6D9A00E7FA50 /* SearchService.swift */; };
 		B3C5FB17237A752800E7FA50 /* ReactiveSearchListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3C5FB16237A752800E7FA50 /* ReactiveSearchListViewModel.swift */; };
-		B3E3873C237BB76C00802DC3 /* UIColorXt.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3E3873B237BB76C00802DC3 /* UIColorXt.swift */; };
+		B3E3873C237BB76C00802DC3 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3E3873B237BB76C00802DC3 /* Extensions.swift */; };
 		B3E3873E237BB7EE00802DC3 /* SearchCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3E3873D237BB7EE00802DC3 /* SearchCollectionViewCell.swift */; };
 /* End PBXBuildFile section */
 
@@ -78,7 +78,7 @@
 		B3C5FB07237A66B000E7FA50 /* ViewModelType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModelType.swift; sourceTree = "<group>"; };
 		B3C5FB14237A6D9A00E7FA50 /* SearchService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchService.swift; sourceTree = "<group>"; };
 		B3C5FB16237A752800E7FA50 /* ReactiveSearchListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReactiveSearchListViewModel.swift; sourceTree = "<group>"; };
-		B3E3873B237BB76C00802DC3 /* UIColorXt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColorXt.swift; sourceTree = "<group>"; };
+		B3E3873B237BB76C00802DC3 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		B3E3873D237BB7EE00802DC3 /* SearchCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchCollectionViewCell.swift; sourceTree = "<group>"; };
 		C5A016E987D9DC14A904B69C /* Pods-search.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-search.debug.xcconfig"; path = "Target Support Files/Pods-search/Pods-search.debug.xcconfig"; sourceTree = "<group>"; };
 		C85992545B06AE01277B868E /* Pods-search-searchUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-search-searchUITests.release.xcconfig"; path = "Target Support Files/Pods-search-searchUITests/Pods-search-searchUITests.release.xcconfig"; sourceTree = "<group>"; };
@@ -214,7 +214,7 @@
 			isa = PBXGroup;
 			children = (
 				B3C5FB07237A66B000E7FA50 /* ViewModelType.swift */,
-				B3E3873B237BB76C00802DC3 /* UIColorXt.swift */,
+				B3E3873B237BB76C00802DC3 /* Extensions.swift */,
 			);
 			path = helper;
 			sourceTree = "<group>";
@@ -512,7 +512,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B3C5FB15237A6D9B00E7FA50 /* SearchService.swift in Sources */,
-				B3E3873C237BB76C00802DC3 /* UIColorXt.swift in Sources */,
+				B3E3873C237BB76C00802DC3 /* Extensions.swift in Sources */,
 				B3B9D52B237812BE00663139 /* RestApi.swift in Sources */,
 				B3B9D4F82377FC3D00663139 /* ViewController.swift in Sources */,
 				B34C83B623785DAB00315A8A /* ShopResponse.swift in Sources */,
