@@ -7,28 +7,40 @@
 //
 
 import XCTest
+import RxSwift
+import Moya
 @testable import search
 
 class searchTests: XCTestCase {
+    
+    let viewModel = ReactiveSearchListViewModel()
 
-    override func setUp() {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
+    let disposeBag = DisposeBag()
+    
+    func testWidth() {
+        let startstring = "meong"
+        let width = startstring.widthOfString(usingFont: UIFont(name:"verdana", size: 13.0)!)
+//        XCTAssertNil(width)
+        
+        XCTAssertEqual(width, 44.60498046875)
+        
     }
-
-    override func tearDown() {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
+    
+    func testData() {
+        let a = NetworkSearchService().reactiveFetchSearchs(start: "0", rows: "10")
+                
+        a.subscribe(onNext:{ result in
+            XCTAssertEqual(result.count, 10)
+            }).disposed(by: disposeBag)
     }
-
-    func testExample() {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
-    }
-
-    func testPerformanceExample() {
-        // This is an example of a performance test case.
-        self.measure {
-            // Put the code you want to measure the time of here.
-        }
+    
+    func testHelloWorld() {
+        var helloWorld: String?
+        
+        XCTAssertNil(helloWorld)
+        
+        helloWorld = "hello world"
+        XCTAssertEqual(helloWorld, "hello world")
     }
 
 }

@@ -130,7 +130,10 @@ class ViewController: UIViewController {
         }.disposed(by: disposeBag)
     
         
-        output.errorData.drive(onNext: {errorMessage in print ("error nih", errorMessage)}).disposed(by: disposeBag)
+        output.errorData.drive(onNext: {errorMessage in
+            let alert = UIAlertController(title: "Ups", message: "Error: \(errorMessage)", preferredStyle: UIAlertController.Style.alert)
+            alert.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default, handler: nil))
+            self.present(alert, animated: true, completion: nil)}).disposed(by: disposeBag)
     
         output.isLoading.drive(refreshControl.rx.isRefreshing).disposed(by: disposeBag)
         
@@ -166,16 +169,7 @@ extension ViewController: UIScrollViewDelegate {
 
         if isAtTop
         {
-            
-//            x = 0
-//            self.viewModel.privateDataSource.value.removeAll()
            viewModel.start = 0
-//            self.viewModel.privateDataSource.value.removeAll()
-//            x = x + 10
-//            self.viewModel.isStart = true
-//            if (self.viewModel.isStart == true) {
-//                self.viewModel.isStart = false
-//            }
             print("awal")
         }
         else if isAtBottom

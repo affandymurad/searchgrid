@@ -380,7 +380,7 @@ class SaringViewController: UIViewController, UITextFieldDelegate {
         }
         
         var xPos:CGFloat = 15.0
-        var ypos: CGFloat = 410.0
+        var ypos: CGFloat = 430.0
         var tag: Int = 1
         for str in data  {
             let startstring = str as! String
@@ -491,6 +491,10 @@ class SaringViewController: UIViewController, UITextFieldDelegate {
     }
     
     @objc func pressed() {
+        
+        var min = 0.0
+        var max = 10000000.0
+        
         let formatter = NumberFormatter()
         formatter.groupingSeparator = "."
         formatter.numberStyle = .decimal
@@ -499,14 +503,38 @@ class SaringViewController: UIViewController, UITextFieldDelegate {
         
         if let numberMin = formatter.number(from: minimumTextInput.text ?? "0.0") {
             let amount = numberMin.decimalValue
+            min = Double(numberMin)
             UserDefaults.standard.set(amount, forKey: "pmin")
         }
         
         if let numberMax = formatter.number(from: maximumTextInput.text ?? "10000000.0") {
             let amount = numberMax.decimalValue
+            max = Double(numberMax)
             UserDefaults.standard.set(amount, forKey: "pmax")
         }
         
+        if (min > max) {
+            let alert = UIAlertController(title: "Ups", message: "Minimum must be smaller than maximum!", preferredStyle: UIAlertController.Style.alert)
+            alert.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default, handler: nil))
+            self.present(alert, animated: true, completion: nil)
+            return
+        }
+        
+        if (max < min) {
+            let alert = UIAlertController(title: "Ups", message: "Maximum must be larger than maximum!", preferredStyle: UIAlertController.Style.alert)
+            alert.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default, handler: nil))
+            self.present(alert, animated: true, completion: nil)
+            return
+        }
+        
+        if (max == min) {
+            let alert = UIAlertController(title: "Ups", message: "Maximum must be different with maximum!", preferredStyle: UIAlertController.Style.alert)
+            alert.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default, handler: nil))
+            self.present(alert, animated: true, completion: nil)
+            return
+        }
+        
+
         UserDefaults.standard.set(isWholeSale, forKey: "wholesale")
         
         guard let text = searchTextInput.text, !text.isEmpty else {
