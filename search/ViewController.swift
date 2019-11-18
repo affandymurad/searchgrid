@@ -13,7 +13,7 @@ import RxCocoa
 class ViewController: UIViewController {
     
     let viewModel = ReactiveSearchListViewModel()
-    var x = 0
+//    var x = 0
 
     let disposeBag = DisposeBag()
     
@@ -27,13 +27,20 @@ class ViewController: UIViewController {
 
     func reloadMore() {
 
-        viewModel.start = x
-         x = x + 10
+//         x += 10
+        viewModel.start += 10
+
         
         let a = NetworkSearchService().reactiveFetchSearchs(start: String(self.viewModel.start), rows: String(self.viewModel.rows))
         self.didScrollReachBottomTrigger.onNext(a.subscribe(onNext: {result in
+//            if (self.viewModel.start == 0) {
+//                self.privateDataSource.value.removeAll()
+//            } else {
+//                self.viewModel.privateDataSource.value.append(contentsOf: result)
+//            }
             
-            self.viewModel.privateDataSource.value.append(contentsOf: result)
+            
+
 //            self.privateDataSource.value.append("Item")
 //            self.rawSearchs.append(contentsOf: result)
 //            self.collectionView.reloadData()
@@ -158,10 +165,16 @@ extension ViewController: UIScrollViewDelegate {
 
         if isAtTop
         {
-            x = 0
-           viewModel.start = x
-            x = x + 10
-            self.viewModel.privateDataSource.value.removeAll()
+            
+//            x = 0
+//            self.viewModel.privateDataSource.value.removeAll()
+           viewModel.start = 0
+//            self.viewModel.privateDataSource.value.removeAll()
+//            x = x + 10
+//            self.viewModel.isStart = true
+//            if (self.viewModel.isStart == true) {
+//                self.viewModel.isStart = false
+//            }
             print("awal")
         }
         else if isAtBottom

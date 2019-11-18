@@ -14,6 +14,7 @@ class ReactiveSearchListViewModel: ViewModelType {
     let service: SearchServiceProtocol
     var start = 0
     var rows = 10
+//    var isStart = false
     
     
 //    var rawSearchs: [Shop] = []
@@ -52,19 +53,24 @@ class ReactiveSearchListViewModel: ViewModelType {
             _ in isLoading.accept(true)
             })
             .flatMap{
-            [service] _ -> Driver<[Shop]> in service
+            [service] _ -> Driver<[Shop]> in
+                service
                 .reactiveFetchSearchs(start: String(self.start), rows: String(self.rows))
                 .do(onNext:{result in
                     isLoading.accept(false)
+                if (self.start == 0) {
+                    self.privateDataSource.value.removeAll()
+                }
+//                else {
+                    self.privateDataSource.value.append(contentsOf: result)
+//                }
+                    
                 }, onError: {error in errorMessage.onNext(error.localizedDescription)
                     isLoading.accept(false)
                 })
-                .asDriver{_ -> Driver<[Shop]> in Driver.empty()}.map{
-                    if (self.start > 0) {
-                        return $0 + self.privateDataSource.value
-                    } else {
-                        return $0
-                    }
+                .asDriver{_ -> Driver<[Shop]> in Driver.empty()}
+                    .map{_ in
+                    return self.privateDataSource.value
                 }
         }
         
